@@ -15,9 +15,7 @@
     --brand: #ff7043;
     --brand-dark: #e2542a;
     --gold: #f5b301;
-    --ok: #2fa36b;
     --bad: #e04b4b;
-    --shadow: 0 4px 0 rgba(0,0,0,.16);
   }
 
   html, body {
@@ -28,22 +26,13 @@
     -webkit-tap-highlight-color: transparent;
     -webkit-text-size-adjust: 100%;
   }
-
-  body {
-    display: flex;
-    justify-content: center;
-    overscroll-behavior: none;
-  }
+  body { display: flex; justify-content: center; overscroll-behavior: none; }
 
   #app {
-    width: 100%;
-    max-width: 920px;
-    min-height: 100%;
+    width: 100%; max-width: 920px; min-height: 100%;
     background: var(--paper);
-    display: flex;
-    flex-direction: column;
-    position: relative;
-    overflow: hidden;
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
   }
 
   .screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
@@ -52,55 +41,43 @@
   button { font: inherit; color: inherit; border: none; background: none; cursor: pointer; }
 
   .btn {
-    background: var(--brand);
-    color: #fff;
-    font-weight: 800;
-    padding: 14px 26px;
-    border-radius: 999px;
+    background: var(--brand); color: #fff; font-weight: 800;
+    padding: 14px 26px; border-radius: 999px;
     box-shadow: 0 4px 0 var(--brand-dark);
-    transition: transform .08s, box-shadow .08s;
-    font-size: 17px;
+    transition: transform .08s, box-shadow .08s; font-size: 17px;
   }
   .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--brand-dark); }
   .btn.ghost { background: #fff; color: var(--ink); box-shadow: 0 3px 0 var(--line); border: 2px solid var(--line); }
   .btn.ghost:active { box-shadow: 0 0 0 var(--line); }
 
-  /* ---------- 타이틀 ---------- */
+  /* ================= 타이틀 ================= */
   #screen-title {
-    align-items: center;
-    justify-content: center;
-    gap: 18px;
-    padding: 40px 24px;
-    text-align: center;
-    background:
-      radial-gradient(circle at 20% 15%, #ffe2b8 0, transparent 45%),
-      radial-gradient(circle at 85% 80%, #ffd9cc 0, transparent 45%),
-      var(--paper);
+    align-items: center; justify-content: center; gap: 16px;
+    padding: 40px 24px; text-align: center;
+    background: radial-gradient(circle at 20% 15%, #ffe2b8 0, transparent 45%),
+                radial-gradient(circle at 85% 80%, #ffd9cc 0, transparent 45%), var(--paper);
   }
-  .logo-emoji { font-size: 76px; line-height: 1; filter: drop-shadow(0 6px 0 rgba(0,0,0,.1)); }
+  .logo-emoji { font-size: 70px; line-height: 1; }
   .logo-emoji span { display: inline-block; animation: bob 2.2s ease-in-out infinite; }
   .logo-emoji span:nth-child(2) { animation-delay: .3s; }
   .logo-emoji span:nth-child(3) { animation-delay: .6s; }
   @keyframes bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-12px) rotate(3deg); } }
-
   h1 { font-size: 38px; letter-spacing: -1px; }
   .subtitle { color: var(--ink-soft); font-size: 16px; font-weight: 600; line-height: 1.6; }
-  .made-by { margin-top: 8px; font-size: 13px; color: var(--ink-soft); opacity: .8; }
+  .made-by { margin-top: 6px; font-size: 13px; color: var(--ink-soft); opacity: .8; }
 
-  /* ---------- 공통 상단바 ---------- */
+  /* ================= 상단바 ================= */
   .topbar {
-    display: flex; align-items: center; gap: 10px;
-    padding: 12px 14px;
-    background: #fff;
-    border-bottom: 2px solid var(--line);
-    flex: none;
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; background: #fff;
+    border-bottom: 2px solid var(--line); flex: none;
   }
   .topbar .spacer { flex: 1; }
   .chip {
-    display: inline-flex; align-items: center; gap: 6px;
+    display: inline-flex; align-items: center; gap: 5px;
     background: var(--paper); border: 2px solid var(--line);
-    border-radius: 999px; padding: 6px 13px;
-    font-weight: 800; font-size: 15px; white-space: nowrap;
+    border-radius: 999px; padding: 5px 12px;
+    font-weight: 800; font-size: 14px; white-space: nowrap;
   }
   .chip.coin { border-color: #f7dd9a; background: #fff7e0; color: #a97400; }
   .chip.timer { border-color: #cfe6d8; background: #eefaf3; color: #1f7a4f; font-variant-numeric: tabular-nums; }
@@ -108,18 +85,14 @@
   @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
   .back-btn { font-size: 22px; padding: 4px 8px; line-height: 1; }
 
-  /* ---------- 식당 선택 ---------- */
+  /* ================= 식당 선택 ================= */
   #screen-map .map-body { flex: 1; overflow-y: auto; padding: 16px 14px 32px; }
   .map-title { font-size: 22px; font-weight: 800; margin-bottom: 4px; }
   .map-desc { font-size: 14px; color: var(--ink-soft); margin-bottom: 16px; }
-
   .rest-card {
-    display: flex; align-items: center; gap: 14px;
-    width: 100%; text-align: left;
-    background: #fff; border: 3px solid var(--line);
-    border-radius: 20px; padding: 14px;
-    margin-bottom: 12px;
-    box-shadow: 0 4px 0 var(--line);
+    display: flex; align-items: center; gap: 14px; width: 100%; text-align: left;
+    background: #fff; border: 3px solid var(--line); border-radius: 20px;
+    padding: 14px; margin-bottom: 12px; box-shadow: 0 4px 0 var(--line);
     transition: transform .08s, box-shadow .08s;
   }
   .rest-card:not(.locked):active { transform: translateY(3px); box-shadow: 0 1px 0 var(--line); }
@@ -129,10 +102,7 @@
   .rest-info { flex: 1; min-width: 0; }
   .rest-name { font-size: 18px; font-weight: 800; }
   .rest-meta { font-size: 13px; color: var(--ink-soft); margin-top: 3px; }
-  .badge {
-    font-size: 12px; font-weight: 800; padding: 3px 9px;
-    border-radius: 999px; background: var(--line); color: var(--ink);
-  }
+  .badge { font-size: 12px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: var(--line); }
   .badge.d1 { background: #dff3e6; color: #1f7a4f; }
   .badge.d2 { background: #fff2cf; color: #a97400; }
   .badge.d3 { background: #ffe0d6; color: #c0472a; }
@@ -140,91 +110,232 @@
   .badge.d5 { background: #ffd9e6; color: #b02f61; }
   .rest-right { flex: none; font-size: 22px; }
 
-  /* ---------- 플레이 ---------- */
-  #screen-play { background: #fff; }
-
+  /* ================= 찾을 물건 목록 ================= */
   .quest {
-    display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px;
-    background: #fff;
-    border-bottom: 2px solid var(--line);
-    flex: none;
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: #fff;
+    border-bottom: 2px solid var(--line); flex: none;
   }
   .boss-face {
-    font-size: 30px; flex: none;
-    width: 46px; height: 46px; border-radius: 50%;
+    font-size: 26px; flex: none; width: 42px; height: 42px; border-radius: 50%;
     background: var(--paper); border: 2px solid var(--line);
     display: grid; place-items: center;
   }
-  .find-list { display: flex; gap: 8px; overflow-x: auto; flex: 1; padding-bottom: 2px; }
+  .find-list { display: flex; gap: 7px; overflow-x: auto; flex: 1; padding-bottom: 2px; }
   .find-list::-webkit-scrollbar { height: 0; }
   .find-item {
-    flex: none; display: flex; flex-direction: column; align-items: center; gap: 1px;
+    flex: none; display: flex; flex-direction: column; align-items: center;
     background: var(--paper); border: 2px solid var(--line);
-    border-radius: 14px; padding: 5px 10px 4px; min-width: 62px;
-    transition: all .2s;
+    border-radius: 13px; padding: 4px 9px 3px; min-width: 58px; transition: all .2s;
   }
-  .find-item .fi-emoji { font-size: 24px; line-height: 1.1; }
+  .find-item .fi-emoji { font-size: 22px; line-height: 1.15; }
   .find-item .fi-name { font-size: 11px; font-weight: 700; color: var(--ink-soft); white-space: nowrap; }
   .find-item.found { background: #eefaf3; border-color: #a9dcc2; }
-  .find-item.found .fi-emoji { filter: grayscale(1); opacity: .45; }
+  .find-item.found .fi-emoji { filter: grayscale(1); opacity: .4; }
   .find-item.found .fi-name { text-decoration: line-through; color: #2fa36b; }
   .find-item.hinting { animation: hintPop .5s ease-in-out 3; }
   @keyframes hintPop { 0%,100% { transform: scale(1); } 50% { transform: scale(1.18); background: #fff2cf; } }
 
-  .stage-wrap { flex: 1; min-height: 0; display: grid; place-items: center; padding: 8px; background: #f3e7d3; }
+  /* ================= 식당 무대 ================= */
+  .stage-wrap { flex: 1; min-height: 0; display: grid; place-items: center; padding: 6px; background: #241812; }
   .stage {
-    position: relative;
-    width: 100%;
-    max-width: 880px;
-    aspect-ratio: 3 / 4;
-    max-height: 100%;
-    border-radius: 16px;
-    overflow: hidden;
+    position: relative; width: 100%; max-width: 900px;
+    aspect-ratio: 3 / 4; max-height: 100%;
+    border-radius: 14px; overflow-x: auto; overflow-y: hidden;
     container-type: inline-size;
-    box-shadow: inset 0 0 0 3px rgba(0,0,0,.08), 0 6px 14px rgba(0,0,0,.15);
-    touch-action: manipulation;
-    user-select: none;
+    box-shadow: 0 6px 16px rgba(0,0,0,.4);
+    touch-action: pan-x; user-select: none; cursor: grab;
+    scrollbar-width: none;
   }
-  @media (min-width: 700px) and (orientation: landscape) {
-    .stage { aspect-ratio: 4 / 3; }
-  }
+  .stage::-webkit-scrollbar { height: 0; }
+  .stage.dragging { cursor: grabbing; }
+  @media (min-width: 700px) and (orientation: landscape) { .stage { aspect-ratio: 4 / 3; } }
   .stage.shake { animation: shake .3s; }
-  @keyframes shake {
-    0%,100% { transform: translateX(0); }
-    25% { transform: translateX(-7px); }
-    75% { transform: translateX(7px); }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-6px); } 75% { transform: translateX(6px); } }
+
+  .scene { position: relative; width: 220%; height: 100%; }
+
+  /* --- 벽 / 바닥 --- */
+  .wall { position: absolute; inset: 0 0 32% 0; background: var(--wall); }
+  .wall::after {           /* 벽지 세로 줄무늬 */
+    content: ""; position: absolute; inset: 0;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.13) 0 1.2%, transparent 1.2% 3.4%);
+  }
+  .wainscot {              /* 벽 아래쪽 나무 굽도리 */
+    position: absolute; left: 0; right: 0; bottom: 32%; height: 7%;
+    background: var(--wood); border-bottom: .5cqw solid rgba(0,0,0,.25);
+  }
+  .floor {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 32%;
+    background: var(--floor);
+  }
+  .floor::after {          /* 바닥 타일 */
+    content: ""; position: absolute; inset: 0;
+    background:
+      repeating-linear-gradient(90deg, rgba(0,0,0,.12) 0 .3%, transparent .3% 4%),
+      repeating-linear-gradient(0deg, rgba(0,0,0,.12) 0 .5%, transparent .5% 12%);
   }
 
-  .floor { position: absolute; left: 0; right: 0; bottom: 0; }
-  .furn { position: absolute; }
+  /* --- 벽 장식 --- */
+  .deco { position: absolute; z-index: 1; }
+  .window {
+    background: linear-gradient(180deg,#bfe6ff,#8fd0f5);
+    border: .8cqw solid var(--wood); border-radius: .6cqw;
+    box-shadow: inset 0 0 0 .3cqw rgba(255,255,255,.5);
+    overflow: hidden;
+  }
+  .window::before, .window::after {
+    content: ""; position: absolute; background: var(--wood);
+  }
+  .window::before { left: 50%; top: 0; bottom: 0; width: .7cqw; transform: translateX(-50%); }
+  .window::after { top: 50%; left: 0; right: 0; height: .7cqw; transform: translateY(-50%); }
+  .menuboard {
+    background: #3a2a20; border: .7cqw solid var(--wood); border-radius: .8cqw;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: .4cqw; color: #ffe9b8; font-weight: 800; padding: .6cqw;
+  }
+  .menuboard .mb-title { font-size: 2.1cqw; letter-spacing: -.02em; }
+  .menuboard .mb-row { font-size: 1.5cqw; opacity: .85; }
+  .picture {
+    background: var(--accent); border: .7cqw solid var(--wood); border-radius: .5cqw;
+    display: grid; place-items: center; font-size: 3cqw;
+  }
+  .clock {
+    background: #fff; border: .7cqw solid var(--wood); border-radius: 50%;
+    display: grid; place-items: center; font-size: 2.6cqw;
+  }
 
+  /* --- 가구 공통 --- */
+  /* z-index 를 줘서 가구와 그 안의 물건이 항상 벽·바닥보다 위에 오게 합니다.
+     이게 없으면 화분 뒤처럼 뒤쪽에 놓인 물건이 바닥에 가려서 눌리지 않습니다. */
+  .furn { position: absolute; z-index: 1; }
+  .deco { z-index: 1; }
+  .furn.can-open { cursor: pointer; }
+  /* 열 수 있다는 표시. 휴대폰에는 마우스 오버가 없으니 항상 보이게 두고
+     살짝 깜빡이게 해서 "여기 눌러봐"를 알려줍니다. 열면 사라집니다. */
+  .furn.can-open::after {
+    content: "✋"; position: absolute; right: -.6cqw; top: -2.2cqw;
+    font-size: 2.4cqw; pointer-events: none;
+    opacity: .55; animation: tapMe 2s ease-in-out infinite; transition: opacity .2s;
+  }
+  .furn.can-open:hover::after { opacity: 1; }
+  .furn.can-open.open::after { opacity: 0; animation: none; }
+  @keyframes tapMe { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-.6cqw); } }
+  .body { position: absolute; inset: 0; border-radius: .8cqw; background: var(--cab); box-shadow: inset 0 -1cqw 0 rgba(0,0,0,.16), 0 .5cqw 0 rgba(0,0,0,.2); }
+
+  /* 안쪽 수납 공간 */
+  .inside {
+    position: absolute; inset: 6%;
+    background: #2a1f19; border-radius: .5cqw;
+    display: flex; flex-wrap: wrap; align-content: center; justify-content: center;
+    gap: 2%; padding: 4%;
+    box-shadow: inset 0 0 1.5cqw rgba(0,0,0,.7);
+    opacity: 0; pointer-events: none; transition: opacity .25s .15s;
+  }
+  .furn.open .inside { opacity: 1; pointer-events: auto; }
+
+  /* 문 */
+  .door {
+    position: absolute; top: 0; bottom: 0; width: 50%;
+    background: var(--cab-door); border: .35cqw solid rgba(0,0,0,.22);
+    border-radius: .6cqw; transition: transform .4s ease;
+    backface-visibility: hidden;
+  }
+  .door.l { left: 0; transform-origin: left center; }
+  .door.r { right: 0; transform-origin: right center; }
+  .door.full { width: 100%; left: 0; transform-origin: left center; }
+  .furn.open .door.l, .furn.open .door.full { transform: perspective(60cqw) rotateY(-118deg); }
+  .furn.open .door.r { transform: perspective(60cqw) rotateY(118deg); }
+  .door .handle {
+    position: absolute; top: 42%; width: .8cqw; height: 16%;
+    background: #d8d2c4; border-radius: .4cqw; box-shadow: 0 0 .3cqw rgba(0,0,0,.4);
+  }
+  .door.l .handle { right: 8%; }
+  .door.r .handle { left: 8%; }
+  .door.full .handle { right: 6%; }
+
+  /* 뚜껑 (쓰레기통) */
+  .lid {
+    position: absolute; left: -4%; right: -4%; top: 0; height: 16%;
+    background: var(--cab-door); border-radius: .6cqw;
+    transform-origin: left bottom; transition: transform .35s ease;
+  }
+  .furn.open .lid { transform: rotate(-105deg) translateY(-20%); }
+
+  /* 상자 뚜껑 */
+  .flap {
+    position: absolute; top: 0; width: 50%; height: 22%;
+    background: var(--cab-door); border: .3cqw solid rgba(0,0,0,.2);
+    transition: transform .35s ease;
+  }
+  .flap.l { left: 0; transform-origin: left bottom; }
+  .flap.r { right: 0; transform-origin: right bottom; }
+  .furn.open .flap.l { transform: rotate(-125deg); }
+  .furn.open .flap.r { transform: rotate(125deg); }
+
+  /* 서랍 */
+  .drawer-front {
+    position: absolute; left: 0; right: 0; background: var(--cab-door);
+    border: .35cqw solid rgba(0,0,0,.22); border-radius: .4cqw;
+    transition: transform .35s ease;
+  }
+  .drawer-front .handle {
+    position: absolute; left: 50%; top: 38%; width: 26%; height: 22%;
+    transform: translateX(-50%); background: #d8d2c4; border-radius: .4cqw;
+  }
+  .furn.open .drawer-front { transform: translateY(46%) scale(1.04); }
+
+  /* 테이블 / 카운터 / 선반 */
+  .tabletop {
+    position: absolute; left: 0; right: 0; top: 0; height: 22%;
+    background: var(--wood); border-radius: 1cqw;
+    box-shadow: 0 .4cqw 0 rgba(0,0,0,.25);
+  }
+  .leg { position: absolute; width: 8%; background: var(--wood); filter: brightness(.8); }
+  .chair {
+    position: absolute; background: var(--wood); border-radius: .5cqw;
+    filter: brightness(.92); box-shadow: 0 .4cqw 0 rgba(0,0,0,.2);
+  }
+  .shelfboard {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 24%;
+    background: var(--wood); border-radius: .4cqw; box-shadow: 0 .4cqw 0 rgba(0,0,0,.25);
+  }
+  .plant-pot { position: absolute; left: 15%; right: 15%; bottom: 0; height: 45%; background: #b5623c; border-radius: 0 0 1cqw 1cqw; }
+  .plant-leaf { position: absolute; left: 0; right: 0; top: 0; height: 60%; display: grid; place-items: center; font-size: 5cqw; }
+  .label {
+    position: absolute; left: 50%; transform: translateX(-50%); bottom: -2.6cqw;
+    font-size: 2.1cqw; font-weight: 800; color: #fff;
+    white-space: nowrap; pointer-events: none;
+    text-shadow: 0 .2cqw .3cqw rgba(0,0,0,.85), 0 0 .6cqw rgba(0,0,0,.7);
+  }
+
+  /* --- 물건 --- */
   .obj {
-    position: absolute;
-    transform: translate(-50%, -50%) rotate(var(--rot));
-    line-height: 1;
-    cursor: pointer;
-    filter: drop-shadow(0 1px 1px rgba(0,0,0,.25));
+    line-height: 1; cursor: pointer;
+    filter: drop-shadow(0 .2cqw .2cqw rgba(0,0,0,.4));
     transition: transform .12s;
   }
-  .obj:active { transform: translate(-50%, -50%) rotate(var(--rot)) scale(1.12); }
+  .obj.free { position: absolute; transform: translate(-50%,-50%) rotate(var(--rot)); }
+  .obj.free:active { transform: translate(-50%,-50%) rotate(var(--rot)) scale(1.15); }
+  .obj.slotted { position: relative; transform: rotate(var(--rot)); }
+  .obj.slotted:active { transform: rotate(var(--rot)) scale(1.15); }
   .obj.gone { animation: found .45s forwards; pointer-events: none; }
   @keyframes found {
-    0% { transform: translate(-50%,-50%) rotate(var(--rot)) scale(1); }
-    45% { transform: translate(-50%,-50%) rotate(0deg) scale(1.9); filter: drop-shadow(0 0 14px #ffd479); }
-    100% { transform: translate(-50%,-50%) scale(0); opacity: 0; }
+    0% { opacity: 1; }
+    45% { transform: scale(1.9); filter: drop-shadow(0 0 1.5cqw #ffd479); opacity: 1; }
+    100% { transform: scale(0); opacity: 0; }
   }
-  .obj.hint { animation: hintRing 1.5s; }
+  .obj.hint { animation: hintRing 1.6s; }
   @keyframes hintRing {
-    0%,100% { filter: drop-shadow(0 1px 1px rgba(0,0,0,.25)); }
-    50% { filter: drop-shadow(0 0 16px #ffd479) drop-shadow(0 0 26px #ffb020); }
+    0%,100% { filter: drop-shadow(0 .2cqw .2cqw rgba(0,0,0,.4)); }
+    50% { filter: drop-shadow(0 0 1.6cqw #ffd479) drop-shadow(0 0 2.6cqw #ffb020); }
   }
 
   .pop {
-    position: absolute; transform: translate(-50%, -50%);
-    font-weight: 900; font-size: 20px; pointer-events: none;
-    animation: popUp .9s forwards; z-index: 60;
-    text-shadow: 0 2px 0 rgba(255,255,255,.9);
+    position: absolute; transform: translate(-50%,-50%);
+    font-weight: 900; font-size: 2.4cqw; pointer-events: none;
+    animation: popUp .9s forwards; z-index: 90;
+    text-shadow: 0 .2cqw 0 rgba(255,255,255,.9);
   }
   @keyframes popUp {
     0% { opacity: 0; transform: translate(-50%,-50%) scale(.6); }
@@ -233,16 +344,23 @@
   }
 
   .bubble {
-    position: absolute; left: 50%; bottom: 12px; transform: translateX(-50%);
-    background: rgba(255,255,255,.96); border: 3px solid var(--ink);
-    border-radius: 18px; padding: 10px 16px;
-    font-weight: 800; font-size: 15px; text-align: center;
-    max-width: 88%; z-index: 55;
-    pointer-events: none; /* 말풍선 아래에 있는 물건도 누를 수 있어야 합니다 */
-    box-shadow: 0 4px 0 rgba(0,0,0,.2);
+    position: absolute; left: 50%; bottom: 3%; transform: translateX(-50%);
+    background: rgba(255,255,255,.97); border: .5cqw solid var(--ink);
+    border-radius: 2cqw; padding: 1.4cqw 2.2cqw;
+    font-weight: 800; font-size: 2.1cqw; text-align: center;
+    max-width: 80%; z-index: 95; pointer-events: none;
+    box-shadow: 0 .5cqw 0 rgba(0,0,0,.25);
     animation: bubbleIn .3s;
   }
-  @keyframes bubbleIn { from { opacity: 0; transform: translateX(-50%) translateY(10px); } }
+  @keyframes bubbleIn { from { opacity: 0; transform: translateX(-50%) translateY(1cqw); } }
+
+  .scroll-hint {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
+    background: rgba(0,0,0,.6); color: #fff; font-weight: 800; font-size: 2.2cqw;
+    padding: 1.2cqw 2.4cqw; border-radius: 999px; z-index: 96; pointer-events: none;
+    animation: fadeOut 3.4s forwards;
+  }
+  @keyframes fadeOut { 0%,60% { opacity: 1; } 100% { opacity: 0; } }
 
   .playbar {
     display: flex; align-items: center; gap: 10px;
@@ -250,10 +368,9 @@
     background: #fff; border-top: 2px solid var(--line); flex: none;
   }
 
-  /* ---------- 결과 오버레이 ---------- */
+  /* ================= 오버레이 ================= */
   .overlay {
-    position: absolute; inset: 0; z-index: 100;
-    background: rgba(43,27,18,.72);
+    position: absolute; inset: 0; z-index: 100; background: rgba(43,27,18,.75);
     display: none; align-items: center; justify-content: center; padding: 20px;
   }
   .overlay.on { display: flex; animation: fadeIn .25s; }
@@ -263,28 +380,26 @@
     width: 100%; max-width: 380px; text-align: center;
     box-shadow: 0 10px 0 rgba(0,0,0,.25);
     animation: panelIn .3s cubic-bezier(.2,1.4,.5,1);
+    max-height: 100%; overflow-y: auto;
   }
   @keyframes panelIn { from { transform: scale(.8); opacity: 0; } }
-  .panel .big { font-size: 60px; line-height: 1; }
-  .panel h2 { font-size: 26px; margin: 10px 0 6px; }
+  .panel .big { font-size: 56px; line-height: 1; }
+  .panel h2 { font-size: 25px; margin: 10px 0 6px; }
   .panel p { color: var(--ink-soft); font-size: 15px; line-height: 1.6; font-weight: 600; }
-  .reward {
-    display: flex; justify-content: center; gap: 8px; flex-wrap: wrap;
-    margin: 16px 0 20px;
-  }
+  .reward { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 16px 0 20px; }
   .reward .chip { font-size: 16px; padding: 9px 16px; }
   .panel-btns { display: flex; flex-direction: column; gap: 10px; }
-
   .levelup {
-    background: linear-gradient(180deg, #fff6d9, #ffe9b0);
-    border: 3px solid var(--gold);
+    background: linear-gradient(180deg,#fff6d9,#ffe9b0); border: 3px solid var(--gold);
     border-radius: 16px; padding: 10px; margin-bottom: 14px;
-    font-weight: 900; color: #a97400;
-    animation: pulse 1s infinite;
+    font-weight: 900; color: #a97400; animation: pulse 1s infinite;
   }
-
   .help-list { text-align: left; font-size: 14px; line-height: 1.9; color: var(--ink-soft); font-weight: 600; margin: 14px 0 20px; }
   .help-list b { color: var(--ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
 </style>
 </head>
 <body>
@@ -294,11 +409,11 @@
   <section id="screen-title" class="screen on">
     <div class="logo-emoji"><span>🍜</span><span>🔎</span><span>🍕</span></div>
     <h1>식당 대소동</h1>
-    <div class="subtitle">사장님이 물건을 잃어버렸어요!<br>가게 안을 뒤져서 찾아주고 코인을 받자</div>
+    <div class="subtitle">사장님이 물건을 잃어버렸어요!<br>냉장고도 열어보고 서랍도 뒤져서 찾아주자</div>
     <button class="btn" id="btn-start" style="margin-top:10px">게임 시작 🎮</button>
     <button class="btn ghost" id="btn-help">어떻게 하는 거야?</button>
     <button class="btn ghost" id="btn-reset" style="font-size:13px;padding:8px 16px">기록 초기화</button>
-    <div class="made-by">삼촌과 조카들이 함께 만든 게임 · v1.0</div>
+    <div class="made-by">삼촌과 조카들이 함께 만든 게임 · v2.0</div>
   </section>
 
   <!-- ===== 식당 선택 ===== -->
@@ -342,11 +457,7 @@
     </div>
   </section>
 
-  <!-- ===== 오버레이 ===== -->
-  <div class="overlay" id="overlay">
-    <div class="panel" id="panel"></div>
-  </div>
-
+  <div class="overlay" id="overlay"><div class="panel" id="panel"></div></div>
 </div>
 
 <script>
@@ -354,39 +465,35 @@
   "use strict";
 
   /* ============================================================
-     게임 데이터 — 식당을 추가하고 싶으면 여기에 한 덩어리만 더 쓰면 됩니다.
+     1. 식당 데이터
+        식당을 추가하려면 이 목록 맨 뒤에 한 덩어리만 더 쓰면 됩니다.
      ============================================================ */
   var RESTAURANTS = [
     {
-      id: "kimbap",
-      name: "김밥천국",
-      emoji: "🍙",
-      diff: "쉬움", diffClass: "d1",
-      time: 70,
-      boss: "👩‍🍳",
-      bossName: "김밥 사장님",
-      quest: "손님이 몰려온 사이에 물건이 사라졌어! 좀 찾아줄래?",
+      id: "kimbap", name: "김밥천국", emoji: "🍙",
+      diff: "쉬움", diffClass: "d1", time: 120,
+      boss: "👩‍🍳", bossName: "김밥 사장님",
+      quest: "손님이 몰려온 사이에 물건이 사라졌어! 가게 안을 뒤져줄래?",
       praise: "우와, 진짜 잘 찾는다! 우리 가게 최고 도우미야!",
-      wall: "#ffe6bf", wall2: "#ffd79b", floor: "#c98f5a",
+      menu: ["김밥 3000", "라면 4000"],
+      colors: { wall: "#f2c98a", wood: "#8b5a2b", floor: "#c98f5a", cab: "#e8e2d4", cabDoor: "#f5efe2", accent: "#ffb74d" },
+      wallProps: ["🍙", "🕐"],
       targets: [
         { emoji: "🍽️", name: "접시" },
         { emoji: "🧑", name: "사람" },
         { emoji: "📱", name: "핸드폰" }
       ],
-      decoys: ["🍘","🥟","🧅","🥬","🥢","🧂","🍵","🥕","🧄","🍳","🫖","🥡","🍥","📋","🧽","🧻","🍶","🥔","🍙","🥄","🍚"],
-      clutter: 30
+      decoys: ["🍘","🥟","🧅","🥬","🥢","🧂","🍵","🥕","🧄","🍳","🫖","🥡","🍥","📋","🧽","🧻","🍶","🥔","🍙","🥄","🍚","🧂"]
     },
     {
-      id: "pizza",
-      name: "피자가게",
-      emoji: "🍕",
-      diff: "보통", diffClass: "d2",
-      time: 75,
-      boss: "🧑‍🍳",
-      bossName: "피자 사장님",
+      id: "pizza", name: "피자가게", emoji: "🍕",
+      diff: "보통", diffClass: "d2", time: 100,
+      boss: "🧑‍🍳", bossName: "피자 사장님",
       quest: "반죽하다가 정신이 없어서... 이것 좀 찾아주면 안 될까?",
       praise: "대단해! 너 없었으면 오늘 장사 못 할 뻔했어!",
-      wall: "#ffdcd2", wall2: "#ffc4b4", floor: "#8e5b4a",
+      menu: ["피자 12000", "콜라 2000"],
+      colors: { wall: "#e8b9a8", wood: "#7a4a3a", floor: "#8e5b4a", cab: "#d9cfc4", cabDoor: "#eae0d4", accent: "#e8543f" },
+      wallProps: ["🍕", "🇮🇹"],
       targets: [
         { emoji: "🍕", name: "피자" },
         { emoji: "🍔", name: "햄버거" },
@@ -394,20 +501,17 @@
         { emoji: "👕", name: "옷" }
       ],
       // 옷 종류를 잔뜩 섞어서 '옷' 찾기를 어렵게 만듭니다
-      decoys: ["👗","👖","🧥","🧦","🥼","👚","🧀","🍅","🌶️","🫒","🥓","🍄","🧅","🥤","🧂","🔪","🥖","🫓","🧈","📱","🪑","🧺","🍞","🥫","🕹️"],
-      clutter: 40
+      decoys: ["👗","👖","🧥","🧦","🥼","👚","🧀","🍅","🌶️","🫒","🥓","🍄","🧅","🥤","🧂","🔪","🥖","🫓","🧈","📱","🧺","🍞","🥫","🕹️"]
     },
     {
-      id: "sushi",
-      name: "초밥집",
-      emoji: "🍣",
-      diff: "어려움", diffClass: "d3",
-      time: 80,
-      boss: "👨‍🍳",
-      bossName: "초밥 장인",
+      id: "sushi", name: "초밥집", emoji: "🍣",
+      diff: "어려움", diffClass: "d3", time: 90,
+      boss: "👨‍🍳", bossName: "초밥 장인",
       quest: "손님들이 두고 간 물건이 뒤죽박죽 섞여버렸구나. 찾아주겠니?",
       praise: "훌륭하다! 눈이 아주 매섭구나. 자, 상이다!",
-      wall: "#d6ecf5", wall2: "#b8dcec", floor: "#6f8fa0",
+      menu: ["초밥 15000", "우동 8000"],
+      colors: { wall: "#bcd9e6", wood: "#5c6f7a", floor: "#6f8fa0", cab: "#cfd8dc", cabDoor: "#e0e7ea", accent: "#4a90a4" },
+      wallProps: ["🍣", "🎏"],
       targets: [
         { emoji: "7️⃣", name: "숫자 7" },
         { emoji: "🃏", name: "숫자 카드" },
@@ -416,20 +520,17 @@
         { emoji: "🍽️", name: "접시" }
       ],
       // 다른 숫자들을 잔뜩 넣어서 '숫자 7' 찾기를 진짜 어렵게 만듭니다
-      decoys: ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","8️⃣","9️⃣","0️⃣","🔢","🎴","📷","📹","🎥","💻","⌚","🍣","🍤","🦐","🦀","🐙","🍶","🫖","🥗","🧊","🔪","🍋","🥑","🧂","🥒","🐠"],
-      clutter: 50
+      decoys: ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","8️⃣","9️⃣","0️⃣","🔢","🎴","📷","📹","🎥","💻","⌚","🍣","🍤","🦐","🦀","🐙","🍶","🫖","🥗","🧊","🔪","🍋","🥑","🧂","🥒","🐠"]
     },
     {
-      id: "chinese",
-      name: "중국집",
-      emoji: "🥡",
-      diff: "매우 어려움", diffClass: "d4",
-      time: 85,
-      boss: "🧔‍♂️",
-      bossName: "짜장 사장님",
+      id: "chinese", name: "중국집", emoji: "🥡",
+      diff: "매우 어려움", diffClass: "d4", time: 75,
+      boss: "🧔‍♂️", bossName: "짜장 사장님",
       quest: "배달 나가야 하는데 물건이 다 어디 갔어! 급해 급해!",
       praise: "빠르다! 너 우리 가게에서 일할 생각 없냐?",
-      wall: "#ffd9d9", wall2: "#f5b9b9", floor: "#7d4b3f",
+      menu: ["짜장면 7000", "탕수육 20000"],
+      colors: { wall: "#e8a9a9", wood: "#6d3b32", floor: "#7d4b3f", cab: "#d4b5a0", cabDoor: "#e5cbb8", accent: "#c62828" },
+      wallProps: ["🏮", "🧧"],
       targets: [
         { emoji: "🍖", name: "갈비" },
         { emoji: "🍔", name: "햄버거" },
@@ -438,20 +539,17 @@
         { emoji: "🎮", name: "게임기" }
       ],
       // 사람과 옷을 비슷한 것들 사이에 숨깁니다
-      decoys: ["🧒","👦","👧","🧓","👵","👴","🧔","👗","👖","🧥","🧦","👚","🕹️","🍗","🥩","🥓","🍥","🥠","🧧","🏮","🥬","🧅","🧄","🌶️","🍤","🥢","🍶","🫖","🍲","🥘","🛵","📞","🧺"],
-      clutter: 58
+      decoys: ["🧒","👦","👧","🧓","👵","👴","🧔","👗","👖","🧥","🧦","👚","🕹️","🍗","🥩","🥓","🍥","🥠","🧧","🥬","🧅","🧄","🌶️","🍤","🥢","🍶","🫖","🍲","🥘","🛵","📞","🧺"]
     },
     {
-      id: "buffet",
-      name: "생일파티 뷔페",
-      emoji: "🎂",
-      diff: "최고 난이도", diffClass: "d5",
-      time: 95,
-      boss: "🤵",
-      bossName: "뷔페 지배인",
+      id: "buffet", name: "생일파티 뷔페", emoji: "🎂",
+      diff: "최고 난이도", diffClass: "d5", time: 60,
+      boss: "🤵", bossName: "뷔페 지배인",
       quest: "오늘 생일파티인데 준비물이 전부 사라졌습니다! 마지막 도전입니다!",
       praise: "완벽합니다! 당신은 이 가게의 전설입니다!",
-      wall: "#f0e2ff", wall2: "#dcc6f7", floor: "#6b5a86",
+      menu: ["뷔페 25000", "케이크 무료"],
+      colors: { wall: "#d6c2f0", wood: "#5a4a72", floor: "#6b5a86", cab: "#e0d5f0", cabDoor: "#eee6fa", accent: "#9c6ade" },
+      wallProps: ["🎈", "🎊"],
       targets: [
         { emoji: "🍕", name: "피자" },
         { emoji: "🍖", name: "갈비" },
@@ -461,78 +559,97 @@
         { emoji: "🧑", name: "사람" }
       ],
       // 마지막 판이라 헷갈리는 것들을 전부 쏟아붓습니다
-      decoys: ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","8️⃣","9️⃣","🔢","🎴","🧒","👦","👧","🧓","👵","🧔","📷","📹","🎥","🍗","🥩","🌭","🍔","🍟","🎂","🍰","🍩","🍪","🧁","🍫","🍬","🍭","🥧","🍦","🎈","🎉","🎊","🍇","🍓","🍉","🥗","🧀","🥨","🍿","🎁","👕","📱","🍽️"],
-      clutter: 70
+      decoys: ["1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","8️⃣","9️⃣","🔢","🎴","🧒","👦","👧","🧓","👵","🧔","📷","📹","🎥","🍗","🥩","🌭","🍔","🍟","🎂","🍰","🍩","🍪","🧁","🍫","🍬","🍭","🥧","🍦","🎈","🎉","🎊","🍇","🍓","🍉","🥗","🧀","🥨","🍿","🎁","👕","📱","🍽️"]
     }
   ];
 
-  var COIN_PER_FIND = 10;   // 물건 하나 찾을 때 코인
-  var CLEAR_BONUS   = 50;   // 클리어 보너스
-  var TIME_BONUS    = 2;    // 남은 1초당 코인
-  var HINT_COST     = 30;   // 힌트 가격
-  var WRONG_PENALTY = 3;    // 헛다리 짚으면 깎이는 시간(초)
+  /* ============================================================
+     2. 식당 구조 — 어디에 숨길 수 있는지
+        kind "in"   : 문을 열어야 보이는 곳 (냉장고, 서랍, 상자…)  ← 진짜 숨는 자리
+        kind "on"   : 위에 놓여 있는 곳 (선반, 카운터, 테이블 위)
+        kind "under": 밑에 굴러 들어간 곳 (테이블 밑, 화분 뒤)
+     ============================================================ */
+  var LAYOUT = [
+    // ---------- 주방 구역 ----------
+    { id:"fridge",  type:"door2",  kind:"in",    x:2,  y:24, w:9,  h:46, cap:4, name:"냉장고" },
+    { id:"cupA",    type:"door2",  kind:"in",    x:13, y:14, w:11, h:15, cap:3, name:"찬장" },
+    { id:"oven",    type:"door1",  kind:"in",    x:13, y:46, w:9,  h:24, cap:3, name:"오븐" },
+    { id:"shelfA",  type:"shelf",  kind:"on",    x:26, y:20, w:14, h:6,  cap:4, name:"선반" },
+    { id:"drawer",  type:"drawer", kind:"in",    x:25, y:46, w:11, h:24, cap:3, name:"서랍장" },
+    { id:"trash",   type:"lid",    kind:"in",    x:38, y:52, w:7,  h:18, cap:3, name:"쓰레기통" },
+    { id:"boxA",    type:"flap",   kind:"in",    x:46, y:56, w:8,  h:14, cap:3, name:"상자" },
+    // ---------- 카운터 구역 ----------
+    { id:"counter", type:"counter",kind:"on",    x:56, y:44, w:18, h:26, cap:4, name:"카운터" },
+    { id:"cupB",    type:"door2",  kind:"in",    x:58, y:14, w:12, h:15, cap:3, name:"위쪽 찬장" },
+    { id:"boxB",    type:"flap",   kind:"in",    x:76, y:58, w:8,  h:12, cap:3, name:"상자" },
+    // ---------- 홀 구역 ----------
+    { id:"tableA",  type:"table",  kind:"on",    x:86, y:50, w:15, h:14, cap:3, name:"테이블" },
+    { id:"tableAu", type:"under",  kind:"under", x:86, y:64, w:15, h:8,  cap:2, name:"테이블 밑" },
+    { id:"tableB",  type:"table",  kind:"on",    x:76, y:74, w:16, h:14, cap:3, name:"테이블" },
+    { id:"tableBu", type:"under",  kind:"under", x:76, y:88, w:16, h:8,  cap:2, name:"테이블 밑" },
+    { id:"plant",   type:"plant",  kind:"under", x:95, y:70, w:5,  h:22, cap:2, name:"화분 뒤" },
+    { id:"shelfB",  type:"shelf",  kind:"on",    x:88, y:26, w:11, h:6,  cap:3, name:"선반" }
+  ];
+
+  var COIN_PER_FIND = 10;
+  var CLEAR_BONUS   = 50;
+  var TIME_BONUS    = 2;
+  var HINT_COST     = 30;
+  var WRONG_PENALTY = 3;
 
   /* ============================================================
-     저장 (localStorage)
+     3. 저장
      ============================================================ */
-  var SAVE_KEY = "sikdang-daesodong-v1";
+  var SAVE_KEY = "sikdang-daesodong-v2";
   var save = { coin: 0, cleared: [] };
 
   function loadSave() {
     try {
-      var raw = localStorage.getItem(SAVE_KEY);
-      if (!raw) return;
-      var d = JSON.parse(raw);
+      var d = JSON.parse(localStorage.getItem(SAVE_KEY) || "null");
       if (d && typeof d.coin === "number" && Array.isArray(d.cleared)) save = d;
-    } catch (e) { /* 저장 안 되는 환경이면 그냥 새 게임 */ }
+    } catch (e) {}
   }
-  function writeSave() {
-    try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {}
-  }
+  function writeSave() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {} }
   function level() { return save.cleared.length + 1; }
   function isUnlocked(i) { return i === 0 || save.cleared.indexOf(RESTAURANTS[i - 1].id) !== -1; }
   function isCleared(id) { return save.cleared.indexOf(id) !== -1; }
 
   /* ============================================================
-     소리 (파일 없이 WebAudio로 직접 만듭니다)
+     4. 소리 (파일 없이 직접 만듭니다)
      ============================================================ */
   var actx = null;
   function audio() {
-    if (!actx) {
-      var AC = window.AudioContext || window.webkitAudioContext;
-      if (AC) actx = new AC();
-    }
+    if (!actx) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); }
     if (actx && actx.state === "suspended") actx.resume();
     return actx;
   }
   function tone(freq, start, dur, type, vol) {
-    var ac = audio();
-    if (!ac) return;
+    var ac = audio(); if (!ac) return;
     var o = ac.createOscillator(), g = ac.createGain();
-    o.type = type || "sine";
-    o.frequency.value = freq;
+    o.type = type || "sine"; o.frequency.value = freq;
     var t = ac.currentTime + start;
     g.gain.setValueAtTime(0, t);
-    g.gain.linearRampToValueAtTime(vol || 0.14, t + 0.01);
-    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    g.gain.linearRampToValueAtTime(vol || .14, t + .01);
+    g.gain.exponentialRampToValueAtTime(.0001, t + dur);
     o.connect(g); g.connect(ac.destination);
-    o.start(t); o.stop(t + dur + 0.02);
+    o.start(t); o.stop(t + dur + .02);
   }
   var sfx = {
-    find:  function () { tone(660, 0, .12, "triangle", .16); tone(990, .08, .18, "triangle", .14); },
-    wrong: function () { tone(160, 0, .18, "sawtooth", .10); },
-    clear: function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, i * .11, .32, "triangle", .15); }); },
-    fail:  function () { [392, 330, 262].forEach(function (f, i) { tone(f, i * .14, .3, "sine", .13); }); },
-    tap:   function () { tone(440, 0, .07, "square", .07); }
+    find:  function () { tone(660,0,.12,"triangle",.16); tone(990,.08,.18,"triangle",.14); },
+    wrong: function () { tone(160,0,.18,"sawtooth",.10); },
+    open:  function () { tone(220,0,.09,"square",.05); tone(300,.05,.10,"square",.04); },
+    clear: function () { [523,659,784,1047].forEach(function (f,i){ tone(f,i*.11,.32,"triangle",.15); }); },
+    fail:  function () { [392,330,262].forEach(function (f,i){ tone(f,i*.14,.3,"sine",.13); }); },
+    tap:   function () { tone(440,0,.07,"square",.07); }
   };
 
   /* ============================================================
-     화면 전환
+     5. 화면
      ============================================================ */
   var $ = function (id) { return document.getElementById(id); };
   function show(id) {
-    var list = document.querySelectorAll(".screen");
-    for (var i = 0; i < list.length; i++) list[i].classList.remove("on");
+    var l = document.querySelectorAll(".screen");
+    for (var i = 0; i < l.length; i++) l[i].classList.remove("on");
     $(id).classList.add("on");
   }
   function refreshHud() {
@@ -541,9 +658,6 @@
     $("hud-level").textContent = level();
   }
 
-  /* ============================================================
-     식당 목록
-     ============================================================ */
   function buildMap() {
     var box = $("rest-list");
     box.innerHTML = "";
@@ -553,221 +667,347 @@
       card.className = "rest-card" + (unlocked ? "" : " locked") + (cleared ? " cleared" : "");
       card.innerHTML =
         '<div class="rest-emoji">' + (unlocked ? r.emoji : "🔒") + '</div>' +
-        '<div class="rest-info">' +
-          '<div class="rest-name">' + r.name + (cleared ? " ✅" : "") + '</div>' +
-          '<div class="rest-meta">' +
-            '<span class="badge ' + r.diffClass + '">' + r.diff + '</span> ' +
-            '찾을 물건 ' + r.targets.length + '개 · ' + r.time + '초' +
-          '</div>' +
-        '</div>' +
+        '<div class="rest-info"><div class="rest-name">' + r.name + (cleared ? " ✅" : "") + '</div>' +
+        '<div class="rest-meta"><span class="badge ' + r.diffClass + '">' + r.diff + '</span> ' +
+        '찾을 물건 ' + r.targets.length + '개 · ⏱ ' + timeWords(r.time) + '</div></div>' +
         '<div class="rest-right">' + (unlocked ? "▶" : "") + '</div>';
-      if (unlocked) {
-        card.addEventListener("click", function () { sfx.tap(); startLevel(i); });
-      } else {
-        card.addEventListener("click", function () {
-          card.animate(
-            [{ transform: "translateX(0)" }, { transform: "translateX(-6px)" },
-             { transform: "translateX(6px)" }, { transform: "translateX(0)" }],
-            { duration: 250 }
-          );
-        });
-      }
+      if (unlocked) card.addEventListener("click", function () { sfx.tap(); startLevel(i); });
+      else card.addEventListener("click", function () {
+        card.animate([{transform:"translateX(0)"},{transform:"translateX(-6px)"},
+                      {transform:"translateX(6px)"},{transform:"translateX(0)"}], {duration:250});
+      });
       box.appendChild(card);
     });
   }
 
   /* ============================================================
-     플레이
+     6. 식당 그리기
      ============================================================ */
-  var cur = null;      // 현재 식당 데이터
-  var curIndex = 0;
-  var remain = [];     // 아직 못 찾은 목표
-  var timeLeft = 0;
-  var timerId = null;
-  var running = false;
+  var cur = null, curIndex = 0, remain = [], timeLeft = 0, timerId = null, running = false;
 
   function rand(a, b) { return a + Math.random() * (b - a); }
-  function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
-
-  // 이미 놓인 물건들과 가장 가까운 거리
-  function nearest(spots, x, y) {
-    var min = Infinity;
-    for (var i = 0; i < spots.length; i++) {
-      var dx = spots[i].x - x, dy = spots[i].y - y;
-      var d = Math.sqrt(dx * dx + dy * dy);
-      if (d < min) min = d;
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+  function shuffle(a) {
+    a = a.slice();
+    for (var i = a.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1)), t = a[i]; a[i] = a[j]; a[j] = t;
     }
-    return min;
+    return a;
+  }
+  function el(cls, style) {
+    var d = document.createElement("div");
+    if (cls) d.className = cls;
+    if (style) d.setAttribute("style", style);
+    return d;
+  }
+  function box(f) {
+    return "left:" + f.x + "%;top:" + f.y + "%;width:" + f.w + "%;height:" + f.h + "%";
   }
 
-  // 물건이 서로 너무 겹치지 않게 자리를 잡아줍니다.
-  // 자리가 빡빡해도 '가장 덜 붐비는 곳'을 골라주기 때문에 물건이 완전히 포개지지 않습니다.
-  function scatter(count, minDist, placed) {
-    var spots = placed ? placed.slice() : [];
-    var startAt = spots.length;
-    for (var i = 0; i < count; i++) {
-      var best = null, bestD = -1, guard = 0;
-      while (guard++ < 60) {
-        var x = rand(6, 94), y = rand(7, 92);
-        var d = nearest(spots, x, y);
-        if (d >= minDist) { best = { x: x, y: y }; break; }
-        if (d > bestD) { bestD = d; best = { x: x, y: y }; }
+  // 가구 한 채를 그립니다. 물건이 들어갈 자리(.inside 또는 표면)를 돌려줍니다.
+  function buildFurniture(f) {
+    var node = el("furn " + f.type, box(f));
+    node.dataset.fid = f.id;
+    var host;
+
+    if (f.type === "door2" || f.type === "door1") {
+      node.appendChild(el("body"));
+      host = el("inside");
+      node.appendChild(host);
+      if (f.type === "door2") {
+        var dl = el("door l"), dr = el("door r");
+        dl.appendChild(el("handle")); dr.appendChild(el("handle"));
+        node.appendChild(dl); node.appendChild(dr);
+      } else {
+        var d1 = el("door full"); d1.appendChild(el("handle")); node.appendChild(d1);
       }
-      spots.push(best);
+      node.classList.add("can-open");
+
+    } else if (f.type === "drawer") {
+      node.appendChild(el("body"));
+      host = el("inside", "inset:4% 6% 46% 6%");
+      node.appendChild(host);
+      var df = el("drawer-front", "top:40%;height:56%");
+      df.appendChild(el("handle"));
+      node.appendChild(df);
+      node.classList.add("can-open");
+
+    } else if (f.type === "lid") {
+      node.appendChild(el("body"));
+      host = el("inside", "inset:20% 10% 6% 10%");
+      node.appendChild(host);
+      node.appendChild(el("lid"));
+      node.classList.add("can-open");
+
+    } else if (f.type === "flap") {
+      node.appendChild(el("body"));
+      host = el("inside", "inset:18% 8% 8% 8%");
+      node.appendChild(host);
+      node.appendChild(el("flap l")); node.appendChild(el("flap r"));
+      node.classList.add("can-open");
+
+    } else if (f.type === "shelf") {
+      node.appendChild(el("shelfboard"));
+      host = el("", "position:absolute;left:2%;right:2%;bottom:24%;display:flex;justify-content:space-around;align-items:flex-end");
+
+    } else if (f.type === "counter") {
+      node.appendChild(el("tabletop"));
+      node.appendChild(el("body", "top:22%;border-radius:0 0 .6cqw .6cqw"));
+      host = el("", "position:absolute;left:3%;right:3%;top:0;transform:translateY(-88%);display:flex;justify-content:space-around;align-items:flex-end");
+
+    } else if (f.type === "table") {
+      node.appendChild(el("tabletop"));
+      node.appendChild(el("leg", "left:10%;top:22%;bottom:0"));
+      node.appendChild(el("leg", "right:10%;top:22%;bottom:0"));
+      node.appendChild(el("chair", "left:-16%;top:34%;width:14%;height:12%"));
+      node.appendChild(el("chair", "right:-16%;top:34%;width:14%;height:12%"));
+      host = el("", "position:absolute;left:4%;right:4%;top:0;transform:translateY(-88%);display:flex;justify-content:space-around;align-items:flex-end");
+
+    } else if (f.type === "under") {
+      // 그림자만 있는 영역 — 물건이 여기 굴러 들어가 있습니다
+      node.appendChild(el("", "position:absolute;inset:0;background:radial-gradient(ellipse at 50% 40%,rgba(0,0,0,.34),transparent 70%)"));
+      host = el("", "position:absolute;inset:0;display:flex;justify-content:space-around;align-items:center");
+
+    } else if (f.type === "plant") {
+      node.appendChild(el("plant-pot"));
+      var leaf = el("plant-leaf"); leaf.textContent = "🪴";
+      node.appendChild(leaf);
+      host = el("", "position:absolute;left:-70%;right:-70%;bottom:0;height:40%;display:flex;justify-content:space-around;align-items:flex-end;z-index:-1");
     }
-    return spots.slice(startAt);
+
+    // 선반 · 카운터 · 테이블처럼 문이 없는 자리는 위에서 host를 붙이지 않았으므로
+    // 여기서 한 번에 붙여줍니다. 안 붙이면 그 자리에 놓은 물건이 화면에 안 나옵니다.
+    if (host && !host.parentNode) node.appendChild(host);
+
+    if (f.name && f.kind === "in") {
+      var lb = el("label"); lb.textContent = f.name; node.appendChild(lb);
+    }
+    return { node: node, host: host };
   }
 
-  function drawScene(r) {
+  function makeObj(emoji, name) {
+    var o = el("obj slotted");
+    o.textContent = emoji;
+    o.style.fontSize = rand(2.8, 4.2).toFixed(2) + "cqw";
+    o.style.setProperty("--rot", rand(-25, 25).toFixed(0) + "deg");
+    if (name) { o.dataset.target = emoji; o.dataset.name = name; }
+    o.addEventListener("click", onTapObject);
+    return o;
+  }
+
+  function drawScene(r, levelIdx) {
     var stage = $("stage");
     stage.innerHTML = "";
-    stage.style.background = "linear-gradient(180deg," + r.wall + " 0%," + r.wall2 + " 100%)";
+    stage.scrollLeft = 0;
 
-    // 바닥
-    var floor = document.createElement("div");
-    floor.className = "floor";
-    floor.style.height = "26%";
-    floor.style.background = r.floor;
-    floor.style.opacity = ".85";
-    stage.appendChild(floor);
+    var c = r.colors;
+    var scene = el("scene");
+    scene.style.setProperty("--wall", c.wall);
+    scene.style.setProperty("--wood", c.wood);
+    scene.style.setProperty("--floor", c.floor);
+    scene.style.setProperty("--cab", c.cab);
+    scene.style.setProperty("--cab-door", c.cabDoor);
+    scene.style.setProperty("--accent", c.accent);
 
-    // 가구 (탁자, 선반, 카운터) — 물건이 살짝 가려지게 해서 찾는 맛을 냅니다
-    var furns = [
-      { x: 4, y: 30, w: 40, h: 4, c: "rgba(0,0,0,.20)", r: 3 },
-      { x: 56, y: 46, w: 40, h: 4, c: "rgba(0,0,0,.20)", r: 3 },
-      { x: 10, y: 62, w: 34, h: 12, c: "rgba(0,0,0,.16)", r: 8 },
-      { x: 58, y: 72, w: 36, h: 14, c: "rgba(0,0,0,.16)", r: 8 },
-      { x: 0, y: 86, w: 100, h: 10, c: "rgba(0,0,0,.13)", r: 0 }
-    ];
-    furns.forEach(function (f) {
-      var d = document.createElement("div");
-      d.className = "furn";
-      d.style.left = f.x + "%"; d.style.top = f.y + "%";
-      d.style.width = f.w + "%"; d.style.height = f.h + "%";
-      d.style.background = f.c;
-      d.style.borderRadius = f.r + "px";
-      d.style.zIndex = 20;
-      stage.appendChild(d);
+    scene.appendChild(el("wall"));
+    scene.appendChild(el("wainscot"));
+    scene.appendChild(el("floor"));
+
+    // 벽 장식
+    var menu = el("deco menuboard", "left:41%;top:12%;width:13%;height:20%");
+    menu.innerHTML = '<div class="mb-title">' + r.emoji + ' ' + r.name + '</div>' +
+      r.menu.map(function (m) { return '<div class="mb-row">' + m + '</div>'; }).join("");
+    scene.appendChild(menu);
+
+    var win = el("deco window", "left:72%;top:12%;width:13%;height:22%");
+    scene.appendChild(win);
+
+    var pic = el("deco picture", "left:30%;top:34%;width:7%;height:11%");
+    pic.textContent = r.wallProps[0];
+    scene.appendChild(pic);
+
+    var clk = el("deco clock", "left:86%;top:12%;width:6%;height:11%");
+    clk.textContent = r.wallProps[1];
+    scene.appendChild(clk);
+
+    // 자리를 난이도에 맞게 고릅니다.
+    // 레벨이 올라갈수록 '열어봐야 하는 곳'에 목표를 넣습니다.
+    var slots = [];
+    LAYOUT.forEach(function (f) {
+      var built = buildFurniture(f);
+      scene.appendChild(built.node);
+      for (var i = 0; i < f.cap; i++) slots.push({ f: f, host: built.host, node: built.node });
     });
 
-    // 목표 + 방해물 배치
+    var inSlots    = shuffle(slots.filter(function (s) { return s.f.kind === "in"; }));
+    var openSlots  = shuffle(slots.filter(function (s) { return s.f.kind !== "in"; }));
+
+    // 레벨 1은 절반만 가구 안에, 마지막 레벨은 전부 가구 안에 숨깁니다
+    var hideRatio = [0.4, 0.6, 0.8, 1, 1][levelIdx] || 1;
+    var chosen = [];
+    r.targets.forEach(function (t, i) {
+      var useIn = (i / r.targets.length) < hideRatio;
+      var pool = useIn ? inSlots : openSlots;
+      if (!pool.length) pool = useIn ? openSlots : inSlots;
+      var s = pool.shift();
+      chosen.push({ slot: s, item: t });
+    });
+
+    // 목표 배치
+    chosen.forEach(function (ch) {
+      ch.slot.host.appendChild(makeObj(ch.item.emoji, ch.item.name));
+    });
+
+    // 남은 자리는 방해물로 채웁니다
     var decoys = r.decoys.filter(function (d) {
       return !r.targets.some(function (t) { return t.emoji === d; });
     });
-
-    // 1) 목표부터 넉넉한 간격으로 배치 — 서로 뭉쳐 있으면 너무 쉬워집니다
-    var targetSpots = scatter(r.targets.length, 22);
-
-    // 2) 방해물은 남은 자리에 촘촘히. 물건이 많을수록 간격을 좁힙니다
-    var gap = Math.max(5, 12 - r.clutter * 0.1);
-    var decoySpots = scatter(r.clutter, gap, targetSpots);
-
-    function put(emoji, name, spot, z) {
-      var el = document.createElement("div");
-      el.className = "obj";
-      el.textContent = emoji;
-      el.style.left = spot.x + "%";
-      el.style.top = spot.y + "%";
-      el.style.fontSize = rand(3.4, 5.4).toFixed(2) + "cqw";
-      el.style.setProperty("--rot", rand(-35, 35).toFixed(0) + "deg");
-      el.style.zIndex = z;
-      if (name) { el.dataset.target = emoji; el.dataset.name = name; }
-      el.addEventListener("click", onTap);
-      stage.appendChild(el);
-    }
-
-    // 방해물은 일부를 가구 뒤(z 10)로 보내 깊이감을 줍니다
-    decoySpots.forEach(function (s, i) {
-      put(pick(decoys), "", s, Math.random() < 0.35 ? 10 : 30);
+    shuffle(inSlots.concat(openSlots)).forEach(function (s) {
+      // 자리를 전부 채우지 않고 조금 비워둬야 자연스럽습니다
+      if (Math.random() < 0.12) return;
+      s.host.appendChild(makeObj(pick(decoys), ""));
     });
 
-    // 목표는 항상 맨 위(z 35)에 둡니다.
-    // 안 그러면 방해물에 완전히 덮여서 누를 수 없는 물건이 생깁니다.
-    r.targets.forEach(function (t, i) {
-      put(t.emoji, t.name, targetSpots[i], 35);
-    });
+    stage.appendChild(scene);
+
+    // 가구 열기
+    scene.addEventListener("click", onTapFurniture);
+
+    var hint = el("scroll-hint");
+    hint.textContent = "← 옆으로 밀어서 가게를 둘러보세요 →";
+    stage.appendChild(hint);
+    setTimeout(function () { if (hint.parentNode) hint.remove(); }, 3500);
   }
 
-  function buildFindList() {
-    var box = $("find-list");
-    box.innerHTML = "";
-    cur.targets.forEach(function (t) {
-      var d = document.createElement("div");
-      d.className = "find-item";
-      d.dataset.emoji = t.emoji;
-      d.innerHTML = '<div class="fi-emoji">' + t.emoji + '</div><div class="fi-name">' + t.name + '</div>';
-      box.appendChild(d);
-    });
+  /* ============================================================
+     7. 조작
+     ============================================================ */
+  var dragged = false;
+
+  function onTapFurniture(e) {
+    if (!running || dragged) return;
+    if (e.target.closest(".obj")) return;         // 물건을 누른 건 따로 처리
+    var f = e.target.closest(".furn.can-open");
+    if (!f) return;
+    f.classList.toggle("open");
+    if (f.classList.contains("open")) sfx.open();
   }
 
-  function say(text, ms) {
-    var stage = $("stage");
-    var old = stage.querySelector(".bubble");
-    if (old) old.remove();
-    var b = document.createElement("div");
-    b.className = "bubble";
-    b.textContent = text;
-    stage.appendChild(b);
-    setTimeout(function () { if (b.parentNode) b.remove(); }, ms || 2600);
-  }
-
-  function popText(el, text, color) {
-    var stage = $("stage");
-    var p = document.createElement("div");
-    p.className = "pop";
-    p.textContent = text;
-    p.style.color = color;
-    p.style.left = el.style.left;
-    p.style.top = el.style.top;
-    stage.appendChild(p);
-    setTimeout(function () { if (p.parentNode) p.remove(); }, 950);
-  }
-
-  function onTap(e) {
-    if (!running) return;
-    var el = e.currentTarget;
-    var emoji = el.dataset.target;
+  function onTapObject(e) {
+    if (!running || dragged) return;
+    e.stopPropagation();
+    var o = e.currentTarget;
+    var emoji = o.dataset.target;
 
     if (emoji && remain.indexOf(emoji) !== -1) {
-      // 찾았다!
       remain.splice(remain.indexOf(emoji), 1);
-      el.classList.add("gone");
+      o.classList.add("gone");
       sfx.find();
-      popText(el, "+" + COIN_PER_FIND + " 🪙", "#a97400");
+      popAt(o, "+" + COIN_PER_FIND + " 🪙", "#a97400");
       save.coin += COIN_PER_FIND;
       refreshHud();
-
       var chip = $("find-list").querySelector('[data-emoji="' + emoji + '"]');
       if (chip) chip.classList.add("found");
 
-      if (remain.length === 0) {
-        finish(true);
-      } else {
-        say(cur.bossName + ": " + el.dataset.name + " 찾았다! " + remain.length + "개 남았어!", 1800);
-      }
+      if (remain.length === 0) finish(true);
+      else say(cur.bossName + ": " + o.dataset.name + " 찾았다! " + remain.length + "개 남았어!", 1800);
     } else {
-      // 헛다리
       sfx.wrong();
       timeLeft = Math.max(0, timeLeft - WRONG_PENALTY);
       updateTimer();
-      popText(el, "-" + WRONG_PENALTY + "초", "#e04b4b");
-      var stage = $("stage");
-      stage.classList.remove("shake");
-      void stage.offsetWidth;
-      stage.classList.add("shake");
+      popAt(o, "-" + WRONG_PENALTY + "초", "#e04b4b");
+      var st = $("stage");
+      st.classList.remove("shake"); void st.offsetWidth; st.classList.add("shake");
       if (timeLeft <= 0) finish(false);
     }
   }
 
+  // 물건 위치에 점수를 띄웁니다 (물건이 가구 안에 있어도 정확히 그 자리에)
+  function popAt(o, text, color) {
+    var stage = $("stage"), scene = stage.querySelector(".scene");
+    if (!scene) return;
+    var a = o.getBoundingClientRect(), b = scene.getBoundingClientRect();
+    var p = el("pop");
+    p.textContent = text;
+    p.style.color = color;
+    p.style.left = ((a.left + a.width / 2 - b.left) / b.width * 100) + "%";
+    p.style.top = ((a.top + a.height / 2 - b.top) / b.height * 100) + "%";
+    scene.appendChild(p);
+    setTimeout(function () { if (p.parentNode) p.remove(); }, 950);
+  }
+
+  function say(text, ms) {
+    var stage = $("stage"), scene = stage.querySelector(".scene");
+    if (!scene) return;
+    var old = scene.querySelector(".bubble");
+    if (old) old.remove();
+    var b = el("bubble");
+    b.textContent = text;
+    // 말풍선은 지금 보고 있는 화면 한가운데에 띄웁니다
+    b.style.left = ((stage.scrollLeft + stage.clientWidth / 2) / scene.offsetWidth * 100) + "%";
+    scene.appendChild(b);
+    setTimeout(function () { if (b.parentNode) b.remove(); }, ms || 2600);
+  }
+
+  // 드래그로 가게 안을 둘러보기 (마우스). 터치는 브라우저 기본 스크롤을 씁니다.
+  (function enableDrag() {
+    var stage = $("stage"), down = false, sx = 0, sl = 0;
+    stage.addEventListener("pointerdown", function (e) {
+      if (e.pointerType === "touch") return;
+      down = true; dragged = false;
+      sx = e.clientX; sl = stage.scrollLeft;
+      stage.classList.add("dragging");
+    });
+    stage.addEventListener("pointermove", function (e) {
+      if (!down) return;
+      var dx = e.clientX - sx;
+      if (Math.abs(dx) > 6) dragged = true;
+      stage.scrollLeft = sl - dx;
+    });
+    function up() {
+      down = false;
+      stage.classList.remove("dragging");
+      setTimeout(function () { dragged = false; }, 0);
+    }
+    stage.addEventListener("pointerup", up);
+    stage.addEventListener("pointercancel", up);
+    stage.addEventListener("pointerleave", up);
+  })();
+
+  /* ============================================================
+     8. 진행
+     ============================================================ */
+  function buildFindList() {
+    var b = $("find-list");
+    b.innerHTML = "";
+    cur.targets.forEach(function (t) {
+      var d = el("find-item");
+      d.dataset.emoji = t.emoji;
+      d.innerHTML = '<div class="fi-emoji">' + t.emoji + '</div><div class="fi-name">' + t.name + '</div>';
+      b.appendChild(d);
+    });
+  }
+
+  // 초를 1:30 처럼 보여줍니다
+  function mmss(sec) {
+    return Math.floor(sec / 60) + ":" + ("0" + (sec % 60)).slice(-2);
+  }
+  // 식당 목록에는 "2분", "1분 30초" 처럼 읽기 쉽게 씁니다
+  function timeWords(sec) {
+    var m = Math.floor(sec / 60), s = sec % 60;
+    if (m && s) return m + "분 " + s + "초";
+    if (m) return m + "분";
+    return s + "초";
+  }
+
   function updateTimer() {
     var t = $("hud-timer");
-    t.textContent = "⏱ " + timeLeft;
+    t.textContent = "⏱ " + mmss(timeLeft);
     t.classList.toggle("low", timeLeft <= 10);
   }
 
   function startLevel(i) {
-    curIndex = i;
-    cur = RESTAURANTS[i];
+    curIndex = i; cur = RESTAURANTS[i];
     remain = cur.targets.map(function (t) { return t.emoji; });
     timeLeft = cur.time;
 
@@ -776,18 +1016,17 @@
     $("btn-hint").textContent = "💡 힌트 (🪙" + HINT_COST + ")";
 
     buildFindList();
-    drawScene(cur);
+    drawScene(cur, i);
     refreshHud();
     updateTimer();
     show("screen-play");
-    say(cur.bossName + ": " + cur.quest, 3400);
+    say(cur.bossName + ": " + cur.quest, 3600);
 
     running = true;
     clearInterval(timerId);
     timerId = setInterval(function () {
       if (!running) return;
-      timeLeft--;
-      updateTimer();
+      timeLeft--; updateTimer();
       if (timeLeft <= 0) finish(false);
     }, 1000);
   }
@@ -800,136 +1039,111 @@
       sfx.clear();
       var bonus = CLEAR_BONUS + timeLeft * TIME_BONUS;
       save.coin += bonus;
-      var leveledUp = !isCleared(cur.id);
-      if (leveledUp) save.cleared.push(cur.id);
-      writeSave();
-      refreshHud();
-
+      var up = !isCleared(cur.id);
+      if (up) save.cleared.push(cur.id);
+      writeSave(); refreshHud();
       var next = RESTAURANTS[curIndex + 1];
       openPanel(
-        '<div class="big">' + cur.boss + '</div>' +
-        '<h2>사장님이 칭찬했어요!</h2>' +
+        '<div class="big">' + cur.boss + '</div><h2>사장님이 칭찬했어요!</h2>' +
         '<p>"' + cur.praise + '"</p>' +
-        (leveledUp ? '<div class="levelup">⭐ 레벨 ' + level() + ' 달성!' +
-          (next ? '<br>' + next.emoji + ' ' + next.name + ' 이(가) 열렸어요!' : '<br>모든 식당을 클리어했어요! 🏆') +
-          '</div>' : '') +
-        '<div class="reward">' +
-          '<span class="chip coin">🪙 +' + bonus + '</span>' +
-          '<span class="chip timer">⏱ ' + timeLeft + '초 남음</span>' +
-        '</div>' +
+        (up ? '<div class="levelup">⭐ 레벨 ' + level() + ' 달성!' +
+          (next ? '<br>' + next.emoji + ' ' + next.name + ' 이(가) 열렸어요!' : '<br>모든 식당을 클리어했어요! 🏆') + '</div>' : '') +
+        '<div class="reward"><span class="chip coin">🪙 +' + bonus + '</span>' +
+        '<span class="chip timer">⏱ ' + timeWords(timeLeft) + ' 남음</span></div>' +
         '<div class="panel-btns">' +
-          (next ? '<button class="btn" data-act="next">' + next.emoji + ' ' + next.name + ' 가기</button>' : '') +
-          '<button class="btn ghost" data-act="map">식당 목록으로</button>' +
-        '</div>'
+        (next ? '<button class="btn" data-act="next">' + next.emoji + ' ' + next.name + ' 가기</button>' : '') +
+        '<button class="btn ghost" data-act="map">식당 목록으로</button></div>'
       );
     } else {
       sfx.fail();
       openPanel(
-        '<div class="big">⏰</div>' +
-        '<h2>시간 초과!</h2>' +
+        '<div class="big">⏰</div><h2>시간 초과!</h2>' +
         '<p>' + (cur.targets.length - remain.length) + ' / ' + cur.targets.length +
-        '개 찾았어요.<br>조금만 더 하면 될 것 같은데?</p>' +
+        '개 찾았어요.<br>냉장고랑 서랍도 열어봤어?</p>' +
         '<div class="panel-btns" style="margin-top:18px">' +
-          '<button class="btn" data-act="retry">🔄 다시 도전</button>' +
-          '<button class="btn ghost" data-act="map">식당 목록으로</button>' +
-        '</div>'
+        '<button class="btn" data-act="retry">🔄 다시 도전</button>' +
+        '<button class="btn ghost" data-act="map">식당 목록으로</button></div>'
       );
     }
   }
 
-  function openPanel(html) {
-    $("panel").innerHTML = html;
-    $("overlay").classList.add("on");
-  }
+  function openPanel(html) { $("panel").innerHTML = html; $("overlay").classList.add("on"); }
   function closePanel() { $("overlay").classList.remove("on"); }
 
   $("overlay").addEventListener("click", function (e) {
     var act = e.target.dataset ? e.target.dataset.act : null;
     if (!act) return;
-    sfx.tap();
-    closePanel();
-
+    sfx.tap(); closePanel();
     if (act === "next") startLevel(curIndex + 1);
     else if (act === "retry") startLevel(curIndex);
     else if (act === "map") { buildMap(); refreshHud(); show("screen-map"); }
-    else if (act === "dowipe") {
-      save = { coin: 0, cleared: [] };
-      writeSave();
-      refreshHud();
-      buildMap();
-    }
-    // act === "close" 는 그냥 닫기만 하면 됩니다
+    else if (act === "dowipe") { save = { coin: 0, cleared: [] }; writeSave(); refreshHud(); buildMap(); }
   });
 
   /* ============================================================
-     버튼
+     9. 버튼
      ============================================================ */
   $("btn-start").addEventListener("click", function () {
-    audio(); sfx.tap();
-    buildMap(); refreshHud(); show("screen-map");
+    audio(); sfx.tap(); buildMap(); refreshHud(); show("screen-map");
   });
 
   $("btn-help").addEventListener("click", function () {
     audio(); sfx.tap();
     openPanel(
-      '<div class="big">🔎</div>' +
-      '<h2>이렇게 하면 돼!</h2>' +
+      '<div class="big">🔎</div><h2>이렇게 하면 돼!</h2>' +
       '<div class="help-list">' +
-        '1. 식당에 들어가면 사장님이 <b>잃어버린 물건</b>을 알려줘요<br>' +
-        '2. 화면 위 목록을 보고 <b>가게 안에서 똑같은 걸 찾아 누르기</b><br>' +
-        '3. 찾을 때마다 <b>코인 ' + COIN_PER_FIND + '개</b>! 시간이 남으면 보너스도 있어요<br>' +
-        '4. 엉뚱한 걸 누르면 <b>시간이 ' + WRONG_PENALTY + '초 줄어요</b>. 조심!<br>' +
-        '5. 다 찾으면 <b>레벨업</b>하고 새 식당이 열려요' +
-      '</div>' +
-      '<div class="panel-btns"><button class="btn" data-act="close">알겠어!</button></div>'
+      '1. 가게를 <b>옆으로 밀어서</b> 주방부터 홀까지 둘러봐요<br>' +
+      '2. <b>냉장고 · 찬장 · 서랍 · 상자 · 쓰레기통</b>은 눌러서 열 수 있어요<br>' +
+      '3. 열었을 때 <b>찾는 물건이 있으면 눌러서 획득!</b> 코인 ' + COIN_PER_FIND + '개<br>' +
+      '4. 테이블 위, 테이블 밑, 화분 뒤도 잘 보세요<br>' +
+      '5. 엉뚱한 걸 누르면 <b>시간이 ' + WRONG_PENALTY + '초 줄어요</b><br>' +
+      '6. 다 찾으면 <b>레벨업</b>하고 새 식당이 열려요' +
+      '</div><div class="panel-btns"><button class="btn" data-act="close">알겠어!</button></div>'
     );
   });
 
   $("btn-reset").addEventListener("click", function () {
     sfx.tap();
     openPanel(
-      '<div class="big">🗑️</div>' +
-      '<h2>기록을 지울까요?</h2>' +
+      '<div class="big">🗑️</div><h2>기록을 지울까요?</h2>' +
       '<p>코인과 클리어한 식당이 모두 사라져요.</p>' +
       '<div class="panel-btns" style="margin-top:18px">' +
-        '<button class="btn ghost" data-act="dowipe">네, 지울래요</button>' +
-        '<button class="btn" data-act="close">아니요</button>' +
-      '</div>'
+      '<button class="btn ghost" data-act="dowipe">네, 지울래요</button>' +
+      '<button class="btn" data-act="close">아니요</button></div>'
     );
   });
 
   $("btn-map-back").addEventListener("click", function () { sfx.tap(); show("screen-title"); });
-
   $("btn-play-back").addEventListener("click", function () {
     running = false; clearInterval(timerId); sfx.tap();
     buildMap(); refreshHud(); show("screen-map");
   });
-
   $("btn-retry").addEventListener("click", function () { sfx.tap(); startLevel(curIndex); });
 
   $("btn-hint").addEventListener("click", function () {
-    if (!running || remain.length === 0) return;
+    if (!running || !remain.length) return;
     if (save.coin < HINT_COST) { sfx.wrong(); say("코인이 부족해요! (🪙" + HINT_COST + " 필요)", 1800); return; }
-    save.coin -= HINT_COST;
-    refreshHud();
-    writeSave();
-    sfx.tap();
+    save.coin -= HINT_COST; refreshHud(); writeSave(); sfx.tap();
 
     var emoji = remain[0];
-    var el = $("stage").querySelector('.obj[data-target="' + emoji + '"]:not(.gone)');
-    if (el) {
-      el.classList.remove("hint"); void el.offsetWidth; el.classList.add("hint");
-      // 화면 밖이면 대충 어느 쪽인지 알려주기
-      var y = parseFloat(el.style.top), x = parseFloat(el.style.left);
-      say((y < 50 ? "위" : "아래") + "쪽 " + (x < 50 ? "왼" : "오른") + "편을 잘 봐!", 2200);
+    var stage = $("stage");
+    var o = stage.querySelector('.obj[data-target="' + emoji + '"]:not(.gone)');
+    if (o) {
+      var furn = o.closest(".furn");
+      var where = furn ? (LAYOUT.filter(function (f) { return f.id === furn.dataset.fid; })[0] || {}).name : null;
+      // 그 가구가 보이도록 화면을 옮겨줍니다
+      if (furn) {
+        var scene = stage.querySelector(".scene");
+        var fx = furn.offsetLeft + furn.offsetWidth / 2;
+        stage.scrollTo({ left: Math.max(0, fx - stage.clientWidth / 2), behavior: "smooth" });
+      }
+      o.classList.remove("hint"); void o.offsetWidth; o.classList.add("hint");
+      setTimeout(function () { say(where ? where + " 쪽을 잘 봐!" : "이 근처에 있어!", 2400); }, 300);
     }
     var chip = $("find-list").querySelector('[data-emoji="' + emoji + '"]');
     if (chip) { chip.classList.remove("hinting"); void chip.offsetWidth; chip.classList.add("hinting"); }
   });
 
-  /* ============================================================
-     시작
-     ============================================================ */
   loadSave();
   refreshHud();
 })();
