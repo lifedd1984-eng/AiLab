@@ -1,0 +1,1066 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>스포츠카 무한 질주</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #05060d;
+    --panel: #0b0e1f;
+    --panel-2: #10142b;
+    --line: #212752;
+    --ink: #eef0fb;
+    --ink-soft: #8d95c4;
+    --ink-faint: #545c8a;
+    --red: #ff3d5e;
+    --yellow: #ffcb3a;
+    --blue: #38c6ff;
+    --green: #3ddc84;
+    --lamp: #ffd9a0;
+  }
+
+  html, body {
+    height: 100%;
+    background: #05070f;
+    color: var(--ink);
+    font-family: "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", -apple-system, system-ui, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-text-size-adjust: 100%;
+  }
+  body { display: flex; justify-content: center; overscroll-behavior: none; }
+
+  #app {
+    width: 100%; max-width: 920px; min-height: 100%;
+    background: var(--bg);
+    display: flex; flex-direction: column;
+    position: relative; overflow: hidden;
+  }
+
+  .screen { display: none; flex-direction: column; flex: 1; min-height: 0; }
+  .screen.on { display: flex; }
+
+  button { font: inherit; color: inherit; border: none; background: none; cursor: pointer; }
+
+  .btn {
+    background: var(--yellow); color: #241505; font-weight: 800;
+    padding: 14px 26px; border-radius: 999px;
+    box-shadow: 0 4px 0 #b8891a;
+    transition: transform .08s, box-shadow .08s; font-size: 17px;
+  }
+  .btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #b8891a; }
+  .btn.ghost {
+    background: var(--panel-2); color: var(--ink);
+    box-shadow: 0 3px 0 #05060d; border: 2px solid var(--line);
+  }
+  .btn.ghost:active { box-shadow: 0 0 0 #05060d; }
+  .btn:disabled { opacity: .45; pointer-events: none; }
+  :focus-visible { outline: 2px solid var(--lamp); outline-offset: 2px; }
+
+  /* ================= 타이틀 ================= */
+  #screen-title {
+    align-items: center; justify-content: center; gap: 16px;
+    padding: 40px 24px; text-align: center; position: relative; overflow: hidden;
+    background: radial-gradient(circle at 78% 16%, rgba(255,225,160,.16) 0 12%, transparent 42%),
+                linear-gradient(180deg, #070b1c 0%, #10152f 55%, #1c1440 100%);
+  }
+  .title-stars { position: absolute; inset: 0; pointer-events: none; }
+  .title-stars i {
+    position: absolute; width: 2px; height: 2px; border-radius: 50%;
+    background: #fff; opacity: .8; animation: twinkle 3s infinite;
+  }
+  @keyframes twinkle { 0%,100% { opacity: .2; } 50% { opacity: .95; } }
+  .logo-emoji { font-size: 62px; line-height: 1; position: relative; }
+  .logo-emoji span { display: inline-block; animation: bob 2.3s ease-in-out infinite; }
+  .logo-emoji span:nth-child(2) { animation-delay: .3s; }
+  @keyframes bob { 0%,100% { transform: translateY(0) rotate(-3deg); } 50% { transform: translateY(-10px) rotate(3deg); } }
+  h1 {
+    font-size: 34px; font-weight: 900; letter-spacing: -.01em; position: relative;
+    background: linear-gradient(90deg, var(--red), var(--yellow), var(--blue));
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+  }
+  .subtitle { color: var(--ink-soft); font-size: 15px; font-weight: 600; line-height: 1.7; position: relative; max-width: 40ch; }
+  .made-by { margin-top: 4px; font-size: 12px; color: var(--ink-faint); position: relative; }
+
+  /* ================= 상단바 ================= */
+  .topbar {
+    display: flex; align-items: center; gap: 8px;
+    padding: 10px 12px; background: var(--panel);
+    border-bottom: 2px solid var(--line); flex: none;
+  }
+  .topbar .spacer { flex: 1; }
+  .chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: var(--panel-2); border: 2px solid var(--line);
+    border-radius: 999px; padding: 5px 12px;
+    font-weight: 800; font-size: 14px; white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .chip.coin { border-color: #7a6320; background: #2a2308; color: var(--yellow); }
+  .chip.dist { border-color: #2b6b4e; background: #0e2418; color: #4ad991; }
+  .back-btn { font-size: 22px; padding: 4px 8px; line-height: 1; }
+
+  /* ================= 차고 ================= */
+  #screen-garage .garage-body { flex: 1; overflow-y: auto; padding: 16px 14px 100px; }
+  .g-title { font-size: 20px; font-weight: 800; margin: 4px 0 12px; }
+
+  .cars-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 26px; }
+  .car-card {
+    position: relative; background: var(--panel); border: 2px solid var(--line); border-radius: 16px;
+    padding: 10px 8px 12px; display: flex; flex-direction: column; align-items: center; gap: 4px;
+    overflow: hidden;
+  }
+  .car-card.selected { border-color: var(--car-glow, var(--yellow)); box-shadow: 0 0 0 2px var(--car-glow, var(--yellow)) inset; }
+  .car-card canvas { width: 100%; max-width: 128px; height: auto; }
+  .car-card .cn { font-size: 13.5px; font-weight: 800; text-align: center; }
+  .car-card .cc { font-size: 10.5px; color: var(--ink-soft); text-align: center; line-height: 1.4; min-height: 28px; }
+  .car-badge {
+    font-family: ui-monospace, "SF Mono", monospace; font-size: 10px; font-weight: 700;
+    padding: 3px 9px; border-radius: 999px; margin-top: 2px;
+  }
+  .car-badge.owned { background: rgba(74,217,145,.14); color: #4ad991; border: 1px solid rgba(74,217,145,.3); }
+  .car-badge.cost { background: rgba(255,203,58,.14); color: var(--yellow); border: 1px solid rgba(255,203,58,.3); }
+  .car-card .lockmark { position: absolute; top: 6px; right: 8px; font-size: 13px; opacity: .8; }
+
+  .theme-row { display: flex; gap: 10px; margin-bottom: 26px; }
+  .theme-card {
+    flex: 1; position: relative; background: var(--panel); border: 2px solid var(--line); border-radius: 16px;
+    padding: 14px 10px; text-align: center; display: flex; flex-direction: column; gap: 4px; align-items: center;
+  }
+  .theme-card.selected { border-color: var(--lamp); box-shadow: 0 0 0 2px var(--lamp) inset; }
+  .theme-card .te { font-size: 26px; }
+  .theme-card .tn { font-size: 14px; font-weight: 800; }
+  .theme-card .td { font-size: 11px; color: var(--ink-soft); }
+  .theme-card.locked { opacity: .55; }
+
+  .go-btn-wrap {
+    position: absolute; left: 0; right: 0; bottom: 0; padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+    background: linear-gradient(180deg, rgba(5,6,13,0), var(--bg) 30%);
+  }
+  .go-btn { width: 100%; font-size: 19px; padding: 16px; }
+
+  /* ================= 플레이 ================= */
+  #screen-play { background: #000; }
+  .stage-wrap { flex: 1; min-height: 0; display: grid; place-items: center; padding: 6px; background: #05070f; }
+  .stage {
+    position: relative; width: 100%; max-width: 420px;
+    aspect-ratio: 9 / 16; max-height: 100%;
+    border-radius: 16px; overflow: hidden;
+    box-shadow: 0 6px 18px rgba(0,0,0,.6);
+    touch-action: none; user-select: none; cursor: pointer;
+  }
+  .stage canvas { display: block; width: 100%; height: 100%; }
+  .stage.shake { animation: shake .3s; }
+  @keyframes shake { 0%,100% { transform: translateX(0); } 25% { transform: translateX(-7px); } 75% { transform: translateX(7px); } }
+
+  .steer-hint {
+    position: absolute; inset: 0; display: flex; z-index: 5; pointer-events: none;
+    opacity: 0; transition: opacity .3s;
+  }
+  .steer-hint.show { opacity: 1; }
+  .steer-hint .half {
+    flex: 1; display: flex; align-items: center; justify-content: center;
+    font-size: 34px; color: rgba(255,255,255,.5);
+  }
+
+  .countdown {
+    position: absolute; inset: 0; z-index: 20; display: flex; align-items: center; justify-content: center;
+    background: rgba(4,5,12,.5); pointer-events: none;
+  }
+  .countdown span {
+    font-size: 84px; font-weight: 900; color: var(--yellow);
+    text-shadow: 0 0 30px rgba(255,203,58,.7);
+    animation: cdpop .7s ease-out;
+  }
+  @keyframes cdpop { 0% { transform: scale(.4); opacity: 0; } 40% { transform: scale(1.15); opacity: 1; } 100% { transform: scale(1); opacity: 1; } }
+
+  .playbar {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+    background: var(--panel); border-top: 2px solid var(--line); flex: none;
+  }
+  .playbar .hint-text { font-size: 12.5px; color: var(--ink-faint); font-weight: 600; }
+
+  /* ================= 오버레이 ================= */
+  .overlay {
+    position: absolute; inset: 0; z-index: 100; background: rgba(4,5,12,.82);
+    display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .overlay.on { display: flex; animation: fadeIn .2s; }
+  @keyframes fadeIn { from { opacity: 0; } }
+  .panel {
+    background: var(--panel); border: 2px solid var(--line); border-radius: 24px;
+    padding: 26px 22px; width: 100%; max-width: 380px; text-align: center;
+    box-shadow: 0 10px 0 rgba(0,0,0,.5);
+    animation: panelIn .28s cubic-bezier(.2,1.4,.5,1);
+    max-height: 100%; overflow-y: auto;
+  }
+  @keyframes panelIn { from { transform: scale(.82); opacity: 0; } }
+  .panel .big { font-size: 52px; line-height: 1; }
+  .panel h2 { font-size: 23px; font-weight: 800; margin: 8px 0 6px; }
+  .panel p { color: var(--ink-soft); font-size: 14.5px; line-height: 1.6; font-weight: 500; }
+  .reward { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 16px 0 20px; }
+  .reward .chip { font-size: 15px; padding: 8px 14px; }
+  .panel-btns { display: flex; flex-direction: column; gap: 10px; }
+  .record-badge {
+    background: linear-gradient(180deg,#4a3a10,#2e2408); border: 2px solid var(--yellow);
+    border-radius: 14px; padding: 9px; margin-bottom: 12px; font-weight: 900; color: var(--yellow);
+    font-size: 14px;
+  }
+  .help-list { text-align: left; font-size: 14px; line-height: 1.9; color: var(--ink-soft); font-weight: 500; margin: 14px 0 20px; }
+  .help-list b { color: var(--yellow); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  }
+</style>
+</head>
+<body>
+<div id="app">
+
+  <!-- ===== 타이틀 ===== -->
+  <section id="screen-title" class="screen on">
+    <div class="title-stars" id="title-stars"></div>
+    <div class="logo-emoji"><span>🏎️</span><span>🌙</span></div>
+    <h1>스포츠카 무한 질주</h1>
+    <div class="subtitle">야간 도로를 달리며 다가오는 차를 피해보세요.<br>아슬아슬하게 스치면 콤보 보너스!</div>
+    <button class="btn" id="btn-start" style="margin-top:8px">차고로 가기 🏁</button>
+    <button class="btn ghost" id="btn-help">어떻게 하는 거야?</button>
+    <button class="btn ghost" id="btn-reset" style="font-size:13px;padding:8px 16px">기록 초기화</button>
+    <div class="made-by">v1.0 · 확정 기획 기반 제작</div>
+  </section>
+
+  <!-- ===== 차고 ===== -->
+  <section id="screen-garage" class="screen">
+    <div class="topbar">
+      <button class="back-btn" id="btn-garage-back">←</button>
+      <div class="chip dist">🏁 최고 <span id="hud-best">0</span>m</div>
+      <div class="spacer"></div>
+      <div class="chip coin">🪙 <span id="hud-coin">0</span></div>
+    </div>
+    <div class="garage-body">
+      <div class="g-title">차량 선택</div>
+      <div class="cars-grid" id="cars-grid"></div>
+      <div class="g-title">배경 선택</div>
+      <div class="theme-row" id="theme-row"></div>
+    </div>
+    <div class="go-btn-wrap"><button class="btn go-btn" id="btn-go">출발! 🏎️</button></div>
+  </section>
+
+  <!-- ===== 플레이 ===== -->
+  <section id="screen-play" class="screen">
+    <div class="topbar">
+      <button class="back-btn" id="btn-play-back">←</button>
+      <div class="chip dist">🏁 <span id="hud-dist">0</span>m</div>
+      <div class="spacer"></div>
+      <div class="chip coin">🪙 <span id="hud-coin2">0</span></div>
+    </div>
+    <div class="stage-wrap">
+      <div class="stage" id="stage">
+        <canvas id="game-canvas"></canvas>
+        <div class="steer-hint" id="steer-hint"><div class="half">◀</div><div class="half">▶</div></div>
+        <div class="countdown" id="countdown" style="display:none"><span id="countdown-text">3</span></div>
+      </div>
+    </div>
+    <div class="playbar"><span class="hint-text">화면 왼쪽 / 오른쪽을 눌러 차선을 바꾸세요</span></div>
+  </section>
+
+  <div class="overlay" id="overlay"><div class="panel" id="panel"></div></div>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var $ = function (id) { return document.getElementById(id); };
+  function el(cls, style) { var d = document.createElement("div"); if (cls) d.className = cls; if (style) d.setAttribute("style", style); return d; }
+  function rand(a, b) { return a + Math.random() * (b - a); }
+  function pick(a) { return a[Math.floor(Math.random() * a.length)]; }
+
+  /* ============================================================
+     1. 데이터
+     ============================================================ */
+  var CARS = [
+    { id: "muscle", name: "옐로우 선더", accent: "#ffcb3a", cost: 0,   concept: "각진 머슬카 · 스트라이프 2줄" },
+    { id: "wedge",  name: "레드 애로우", accent: "#ff3d5e", cost: 300, concept: "쐐기형 · 큰 리어 스포일러" },
+    { id: "gt",     name: "블루 팬텀",   accent: "#38c6ff", cost: 550, concept: "유선형 GT · 이중 헤드라이트" },
+    { id: "rally",  name: "그린 스콜피온", accent: "#3ddc84", cost: 800, concept: "랠리 스펙 · 루프 라이트바" }
+  ];
+  var DESERT_UNLOCK_M = 800;
+
+  var THEMES = {
+    city: {
+      name: "도시 야경",
+      skyTop: "#05070f", skyMid: "#0c1130", skyHorizon: "#1a2454",
+      moon: "#eef2ff", moonGlow: "rgba(210,224,255,.4)", star: "255,255,255",
+      ground: "#090b1a", asphalt: "#12152a",
+      lane: "rgba(255,255,255,.65)", curb: "#ffd9a0",
+      trafficTones: ["#3a4166", "#4a4166"]
+    },
+    desert: {
+      name: "사막 야경",
+      skyTop: "#170c26", skyMid: "#3a1c30", skyHorizon: "#c9622f",
+      moon: "#ffd9a0", moonGlow: "rgba(255,175,110,.45)", star: "255,214,176",
+      ground: "#241419", asphalt: "#3c2a1e",
+      lane: "rgba(255,214,168,.75)", curb: "#ff9d5c",
+      trafficTones: ["#5a4038", "#6a4a3a"]
+    }
+  };
+
+  var LANES = 4;
+  var BASE_SCROLL = 0.30;          // px/ms 기준 스크롤 속도 (speedMul=1일 때)
+  var BASE_DIST_MPS = 15;          // 표시용 "미터/초" 기준치
+  var COIN_PER_M = 1 / 20;         // 20m 당 코인 1개
+  var SPAWN_START = 1250, SPAWN_MIN = 520, SPAWN_DECAY = 0.018; // ms
+  var SPEED_STEP_MS = 12000, SPEED_STEP = 0.12, SPEED_MAX = 1.9;
+  var NEARMISS_COMBO_WINDOW = 1800;
+
+  /* ============================================================
+     2. 저장
+     ============================================================ */
+  var SAVE_KEY = "supercar-night-rush-v1";
+  var save = { coins: 0, bestDistance: 0, ownedCars: ["muscle"], selectedCar: "muscle", selectedTheme: "city" };
+  function loadSave() {
+    try {
+      var d = JSON.parse(localStorage.getItem(SAVE_KEY) || "null");
+      if (d && typeof d.coins === "number" && Array.isArray(d.ownedCars)) save = d;
+    } catch (e) {}
+  }
+  function writeSave() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(save)); } catch (e) {} }
+  function carDef(id) { return CARS.filter(function (c) { return c.id === id; })[0]; }
+
+  /* ============================================================
+     3. 소리
+     ============================================================ */
+  var actx = null;
+  function audio() {
+    if (!actx) { var AC = window.AudioContext || window.webkitAudioContext; if (AC) actx = new AC(); }
+    if (actx && actx.state === "suspended") actx.resume();
+    return actx;
+  }
+  function tone(f, s, d, t, v) {
+    var ac = audio(); if (!ac) return;
+    var o = ac.createOscillator(), g = ac.createGain();
+    o.type = t || "sine"; o.frequency.value = f;
+    var at = ac.currentTime + s;
+    g.gain.setValueAtTime(0, at);
+    g.gain.linearRampToValueAtTime(v || .14, at + .01);
+    g.gain.exponentialRampToValueAtTime(.0001, at + d);
+    o.connect(g); g.connect(ac.destination);
+    o.start(at); o.stop(at + d + .02);
+  }
+  var sfx = {
+    tap:      function () { tone(440, 0, .06, "square", .06); },
+    steer:    function () { tone(560, 0, .05, "square", .05); },
+    nearmiss: function (combo) { tone(700 + combo * 60, 0, .1, "triangle", .15); tone(1000 + combo * 60, .06, .14, "triangle", .13); },
+    crash:    function () { tone(180, 0, .22, "sawtooth", .18); tone(90, .08, .3, "sawtooth", .16); },
+    coin:     function () { tone(880, 0, .05, "square", .05); },
+    unlock:   function () { [523, 659, 784, 1047].forEach(function (f, i) { tone(f, i * .09, .22, "triangle", .14); }); },
+    record:   function () { [660, 880, 1108, 1320].forEach(function (f, i) { tone(f, i * .1, .3, "triangle", .16); }); },
+    deny:     function () { tone(160, 0, .12, "sawtooth", .1); }
+  };
+
+  /* ============================================================
+     4. 화면 전환
+     ============================================================ */
+  function show(id) {
+    var l = document.querySelectorAll(".screen");
+    for (var i = 0; i < l.length; i++) l[i].classList.remove("on");
+    $(id).classList.add("on");
+  }
+  function openPanel(html) { $("panel").innerHTML = html; $("overlay").classList.add("on"); }
+  function closePanel() { $("overlay").classList.remove("on"); }
+
+  /* ============================================================
+     5. 자동차 드로잉 엔진 (탑뷰 실루엣)
+     ============================================================ */
+  function roundedPolygon(ctx, pts, radius) {
+    ctx.beginPath();
+    for (var i = 0; i < pts.length; i++) {
+      var p0 = pts[(i - 1 + pts.length) % pts.length], p1 = pts[i], p2 = pts[(i + 1) % pts.length];
+      var v1 = { x: p1.x - p0.x, y: p1.y - p0.y }, v2 = { x: p2.x - p1.x, y: p2.y - p1.y };
+      var len1 = Math.hypot(v1.x, v1.y), len2 = Math.hypot(v2.x, v2.y);
+      var r = Math.min(radius, len1 / 2, len2 / 2);
+      var a = { x: p1.x - (v1.x / len1) * r, y: p1.y - (v1.y / len1) * r };
+      var b = { x: p1.x + (v2.x / len2) * r, y: p1.y + (v2.y / len2) * r };
+      if (i === 0) ctx.moveTo(a.x, a.y); else ctx.lineTo(a.x, a.y);
+      ctx.quadraticCurveTo(p1.x, p1.y, b.x, b.y);
+    }
+    ctx.closePath();
+  }
+  function glow(ctx, x, y, r, color, blur) {
+    ctx.save(); ctx.shadowColor = color; ctx.shadowBlur = blur; ctx.fillStyle = color;
+    ctx.beginPath(); ctx.ellipse(x, y, r, r * 0.7, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function hexToRgb(hex) { var n = parseInt(hex.replace("#", ""), 16); return { r: (n >> 16) & 255, g: (n >> 8) & 255, b: n & 255 }; }
+  function rgbToHex(r, g, b) { function c(v) { v = Math.max(0, Math.min(255, Math.round(v))); var s = v.toString(16); return s.length < 2 ? "0" + s : s; } return "#" + c(r) + c(g) + c(b); }
+  function mixHex(a, b, t) { var ca = hexToRgb(a), cb = hexToRgb(b); return rgbToHex(ca.r + (cb.r - ca.r) * t, ca.g + (cb.g - ca.g) * t, ca.b + (cb.b - ca.b) * t); }
+  function rgba(hex, a) { var c = hexToRgb(hex); return "rgba(" + c.r + "," + c.g + "," + c.b + "," + a + ")"; }
+  var CAR_BLACK = "#05060d", CAR_WHITE = "#fff8ec";
+
+  function paintGradient(ctx, w, h, accent) {
+    var shade = mixHex(accent, CAR_BLACK, 0.6), hi = mixHex(accent, CAR_WHITE, 0.8);
+    var g = ctx.createLinearGradient(-w * 0.55, -h * 0.35, w * 0.5, h * 0.3);
+    g.addColorStop(0, shade); g.addColorStop(.34, accent); g.addColorStop(.5, hi); g.addColorStop(.64, accent); g.addColorStop(1, shade);
+    return g;
+  }
+  function finishBodyStroke(ctx, w, h) {
+    ctx.lineWidth = 2.2; ctx.strokeStyle = "rgba(0,0,0,.55)"; ctx.stroke();
+    var rim = ctx.createLinearGradient(-w * 0.5, -h * 0.5, w * 0.25, h * 0.15);
+    rim.addColorStop(0, "rgba(255,255,255,.9)"); rim.addColorStop(.35, "rgba(255,255,255,.18)"); rim.addColorStop(1, "rgba(255,255,255,0)");
+    ctx.lineWidth = 2.6; ctx.strokeStyle = rim; ctx.stroke();
+  }
+  function roundRectPath(ctx, x, y, w, h, r) { ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(x, y, w, h, r); else ctx.rect(x, y, w, h); }
+  function drawWheel(ctx, x, y, ww, wh) {
+    ctx.save(); ctx.translate(x, y);
+    ctx.fillStyle = "#08090f"; roundRectPath(ctx, -ww / 2, -wh / 2, ww, wh, Math.min(ww, wh) * 0.4); ctx.fill();
+    ctx.fillStyle = "rgba(255,255,255,.16)";
+    ctx.beginPath(); ctx.ellipse(-ww * 0.12, 0, ww * 0.2, wh * 0.3, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+  function drawMirror(ctx, x, y, size, accent) {
+    var dark = mixHex(accent, CAR_BLACK, 0.45), dir = x > 0 ? 1 : -1;
+    ctx.save(); ctx.fillStyle = dark;
+    ctx.beginPath(); ctx.moveTo(x, y - size * 0.4); ctx.lineTo(x + size * dir, y); ctx.lineTo(x, y + size * 0.45); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function drawWindshield(ctx, cx, cy, w, h) {
+    var g = ctx.createLinearGradient(cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2);
+    g.addColorStop(0, "#04060d"); g.addColorStop(.5, "#1b2242"); g.addColorStop(1, "#04060d");
+    ctx.fillStyle = g; roundRectPath(ctx, cx - w / 2, cy - h / 2, w, h, Math.min(w, h) * 0.32); ctx.fill();
+    ctx.strokeStyle = "rgba(255,255,255,.4)"; ctx.lineWidth = Math.max(1.4, w * 0.05);
+    ctx.beginPath(); ctx.moveTo(cx - w * 0.28, cy - h * 0.32); ctx.lineTo(cx + w * 0.1, cy + h * 0.28); ctx.stroke();
+  }
+  function lightSlit(ctx, x, y, len, thick, angleDeg, color, blur) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(((angleDeg || 0) * Math.PI) / 180);
+    ctx.shadowColor = color; ctx.shadowBlur = blur; ctx.fillStyle = color;
+    roundRectPath(ctx, -len / 2, -thick / 2, len, thick, thick / 2); ctx.fill();
+    ctx.restore();
+  }
+
+  function drawCar(ctx, type, accent) {
+    var w = 112, h = 234;
+    var HEAD = "#fff6da", TAIL = "#ff3d5e";
+    ctx.save();
+    ctx.save(); ctx.filter = "blur(7px)"; ctx.fillStyle = "rgba(0,0,0,.5)";
+    ctx.beginPath(); ctx.ellipse(0, h * 0.08, w * 0.58, h * 0.52, 0, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+
+    if (type === "wedge") {
+      [-1, 1].forEach(function (s) { drawWheel(ctx, s * w * 0.36, -h * 0.22, w * 0.14, h * 0.15); drawWheel(ctx, s * w * 0.44, h * 0.26, w * 0.15, h * 0.16); });
+      ctx.beginPath();
+      ctx.moveTo(0, -h * 0.5);
+      ctx.bezierCurveTo(w * 0.05, -h * 0.46, w * 0.14, -h * 0.34, w * 0.2, -h * 0.18);
+      ctx.bezierCurveTo(w * 0.3, -h * 0.02, w * 0.42, h * 0.05, w * 0.48, h * 0.22);
+      ctx.bezierCurveTo(w * 0.5, h * 0.34, w * 0.46, h * 0.44, w * 0.4, h * 0.5);
+      ctx.lineTo(-w * 0.4, h * 0.5);
+      ctx.bezierCurveTo(-w * 0.46, h * 0.44, -w * 0.5, h * 0.34, -w * 0.48, h * 0.22);
+      ctx.bezierCurveTo(-w * 0.42, h * 0.05, -w * 0.3, -h * 0.02, -w * 0.2, -h * 0.18);
+      ctx.bezierCurveTo(-w * 0.14, -h * 0.34, -w * 0.05, -h * 0.46, 0, -h * 0.5);
+      ctx.closePath();
+      ctx.fillStyle = paintGradient(ctx, w, h, accent); ctx.fill(); finishBodyStroke(ctx, w, h);
+      ctx.strokeStyle = "rgba(0,0,0,.28)"; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.moveTo(0, -h * 0.46); ctx.lineTo(0, -h * 0.14); ctx.stroke();
+      ctx.fillStyle = mixHex(accent, CAR_BLACK, 0.7);
+      ctx.fillRect(-w * 0.48, h * 0.4, w * 0.96, h * 0.045);
+      ctx.fillRect(-w * 0.3, h * 0.32, w * 0.05, h * 0.1); ctx.fillRect(w * 0.25, h * 0.32, w * 0.05, h * 0.1);
+      drawWindshield(ctx, 0, -h * 0.03, w * 0.42, h * 0.2);
+      drawMirror(ctx, -w * 0.36, -h * 0.1, w * 0.11, accent); drawMirror(ctx, w * 0.36, -h * 0.1, w * 0.11, accent);
+      lightSlit(ctx, -w * 0.22, -h * 0.42, w * 0.2, h * 0.03, -22, HEAD, 12); lightSlit(ctx, w * 0.22, -h * 0.42, w * 0.2, h * 0.03, 22, HEAD, 12);
+      lightSlit(ctx, -w * 0.32, h * 0.45, w * 0.16, h * 0.03, 18, TAIL, 11); lightSlit(ctx, w * 0.32, h * 0.45, w * 0.16, h * 0.03, -18, TAIL, 11);
+
+    } else if (type === "muscle") {
+      [-1, 1].forEach(function (s) { drawWheel(ctx, s * w * 0.48, -h * 0.3, w * 0.15, h * 0.15); drawWheel(ctx, s * w * 0.48, h * 0.3, w * 0.15, h * 0.15); });
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.32, -h * 0.5); ctx.lineTo(w * 0.32, -h * 0.5);
+      ctx.bezierCurveTo(w * 0.42, -h * 0.5, w * 0.5, -h * 0.4, w * 0.5, -h * 0.22);
+      ctx.lineTo(w * 0.5, h * 0.22);
+      ctx.bezierCurveTo(w * 0.5, h * 0.4, w * 0.44, h * 0.5, w * 0.34, h * 0.5);
+      ctx.lineTo(-w * 0.34, h * 0.5);
+      ctx.bezierCurveTo(-w * 0.44, h * 0.5, -w * 0.5, h * 0.4, -w * 0.5, h * 0.22);
+      ctx.lineTo(-w * 0.5, -h * 0.22);
+      ctx.bezierCurveTo(-w * 0.5, -h * 0.4, -w * 0.42, -h * 0.5, -w * 0.32, -h * 0.5);
+      ctx.closePath();
+      ctx.fillStyle = paintGradient(ctx, w, h, accent); ctx.fill(); finishBodyStroke(ctx, w, h);
+      var stripe = mixHex(accent, CAR_BLACK, 0.75); ctx.fillStyle = stripe;
+      ctx.fillRect(-w * 0.15, -h * 0.47, w * 0.1, h * 0.9); ctx.fillRect(w * 0.05, -h * 0.47, w * 0.1, h * 0.9);
+      drawWindshield(ctx, 0, -h * 0.02, w * 0.5, h * 0.22);
+      drawMirror(ctx, -w * 0.48, -h * 0.14, w * 0.1, accent); drawMirror(ctx, w * 0.48, -h * 0.14, w * 0.1, accent);
+      lightSlit(ctx, -w * 0.24, -h * 0.47, w * 0.2, h * 0.045, 0, HEAD, 12); lightSlit(ctx, w * 0.24, -h * 0.47, w * 0.2, h * 0.045, 0, HEAD, 12);
+      lightSlit(ctx, 0, h * 0.45, w * 0.82, h * 0.045, 0, TAIL, 12);
+
+    } else if (type === "gt") {
+      [-1, 1].forEach(function (s) { drawWheel(ctx, s * w * 0.34, -h * 0.18, w * 0.13, h * 0.14); drawWheel(ctx, s * w * 0.38, h * 0.26, w * 0.14, h * 0.15); });
+      ctx.beginPath();
+      ctx.moveTo(0, -h * 0.5);
+      ctx.bezierCurveTo(w * 0.24, -h * 0.46, w * 0.32, -h * 0.22, w * 0.28, -h * 0.02);
+      ctx.bezierCurveTo(w * 0.46, h * 0.06, w * 0.42, h * 0.3, w * 0.3, h * 0.42);
+      ctx.bezierCurveTo(w * 0.18, h * 0.5, -w * 0.18, h * 0.5, -w * 0.3, h * 0.42);
+      ctx.bezierCurveTo(-w * 0.42, h * 0.3, -w * 0.46, h * 0.06, -w * 0.28, -h * 0.02);
+      ctx.bezierCurveTo(-w * 0.32, -h * 0.22, -w * 0.24, -h * 0.46, 0, -h * 0.5);
+      ctx.closePath();
+      ctx.fillStyle = paintGradient(ctx, w, h, accent); ctx.fill(); finishBodyStroke(ctx, w, h);
+      ctx.strokeStyle = "rgba(0,0,0,.35)"; ctx.lineWidth = 3.5;
+      ctx.beginPath(); ctx.moveTo(-w * 0.42, -h * 0.04); ctx.lineTo(-w * 0.4, h * 0.32); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(w * 0.42, -h * 0.04); ctx.lineTo(w * 0.4, h * 0.32); ctx.stroke();
+      drawWindshield(ctx, 0, -h * 0.07, w * 0.36, h * 0.24);
+      drawMirror(ctx, -w * 0.32, -h * 0.12, w * 0.1, accent); drawMirror(ctx, w * 0.32, -h * 0.12, w * 0.1, accent);
+      glow(ctx, -w * 0.26, -h * 0.4, 4.6, HEAD, 12); glow(ctx, -w * 0.14, -h * 0.44, 4.6, HEAD, 12);
+      glow(ctx, w * 0.26, -h * 0.4, 4.6, HEAD, 12); glow(ctx, w * 0.14, -h * 0.44, 4.6, HEAD, 12);
+      lightSlit(ctx, 0, h * 0.4, w * 0.5, h * 0.028, 0, TAIL, 14);
+
+    } else { // rally
+      [-1, 1].forEach(function (s) { drawWheel(ctx, s * w * 0.46, -h * 0.26, w * 0.17, h * 0.16); drawWheel(ctx, s * w * 0.46, h * 0.26, w * 0.17, h * 0.16); });
+      ctx.beginPath();
+      ctx.moveTo(-w * 0.34, -h * 0.5); ctx.lineTo(w * 0.34, -h * 0.5);
+      ctx.bezierCurveTo(w * 0.44, -h * 0.48, w * 0.5, -h * 0.36, w * 0.48, -h * 0.24);
+      ctx.bezierCurveTo(w * 0.44, -h * 0.14, w * 0.34, -h * 0.08, w * 0.32, -h * 0.02);
+      ctx.bezierCurveTo(w * 0.34, h * 0.06, w * 0.44, h * 0.12, w * 0.48, h * 0.22);
+      ctx.bezierCurveTo(w * 0.5, h * 0.34, w * 0.44, h * 0.46, w * 0.34, h * 0.5);
+      ctx.lineTo(-w * 0.34, h * 0.5);
+      ctx.bezierCurveTo(-w * 0.44, h * 0.46, -w * 0.5, h * 0.34, -w * 0.48, h * 0.22);
+      ctx.bezierCurveTo(-w * 0.44, h * 0.12, -w * 0.34, h * 0.06, -w * 0.32, -h * 0.02);
+      ctx.bezierCurveTo(-w * 0.34, -h * 0.08, -w * 0.44, -h * 0.14, -w * 0.48, -h * 0.24);
+      ctx.bezierCurveTo(-w * 0.5, -h * 0.36, -w * 0.44, -h * 0.48, -w * 0.34, -h * 0.5);
+      ctx.closePath();
+      ctx.fillStyle = paintGradient(ctx, w, h, accent); ctx.fill(); finishBodyStroke(ctx, w, h);
+      ctx.fillStyle = mixHex(accent, CAR_BLACK, 0.72);
+      ctx.beginPath(); ctx.ellipse(0, -h * 0.34, w * 0.09, h * 0.05, 0, 0, Math.PI * 2); ctx.fill();
+      drawWindshield(ctx, 0, -h * 0.06, w * 0.42, h * 0.2);
+      drawMirror(ctx, -w * 0.34, -h * 0.12, w * 0.1, accent); drawMirror(ctx, w * 0.34, -h * 0.12, w * 0.1, accent);
+      for (var li = -2; li <= 2; li++) glow(ctx, li * w * 0.09, h * 0.02, 3, HEAD, 8);
+      ctx.strokeStyle = "rgba(0,0,0,.3)"; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(-w * 0.47, -h * 0.24); ctx.lineTo(-w * 0.47, h * 0.22); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(w * 0.47, -h * 0.24); ctx.lineTo(w * 0.47, h * 0.22); ctx.stroke();
+      lightSlit(ctx, -w * 0.24, -h * 0.45, w * 0.2, h * 0.032, 0, HEAD, 12); lightSlit(ctx, w * 0.24, -h * 0.45, w * 0.2, h * 0.032, 0, HEAD, 12);
+      lightSlit(ctx, -w * 0.26, h * 0.44, w * 0.16, h * 0.032, 0, TAIL, 11); lightSlit(ctx, w * 0.26, h * 0.44, w * 0.16, h * 0.032, 0, TAIL, 11);
+    }
+    ctx.restore();
+  }
+
+  /* ============================================================
+     6. 차고 화면
+     ============================================================ */
+  function renderCarPreview(canvas, type, accent) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var w = canvas.clientWidth || 128, h = canvas.clientHeight || 200;
+    canvas.width = w * dpr; canvas.height = h * dpr;
+    var ctx = canvas.getContext("2d");
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, w, h);
+    ctx.translate(w / 2, h / 2);
+    var scale = Math.min(w / 150, h / 260);
+    ctx.scale(scale, scale);
+    drawCar(ctx, type, accent);
+  }
+
+  function buildGarage() {
+    $("hud-best").textContent = Math.floor(save.bestDistance);
+    $("hud-coin").textContent = save.coins;
+
+    var grid = $("cars-grid");
+    grid.innerHTML = "";
+    CARS.forEach(function (c) {
+      var owned = save.ownedCars.indexOf(c.id) !== -1;
+      var selected = save.selectedCar === c.id;
+      var card = document.createElement("button");
+      card.className = "car-card" + (selected ? " selected" : "");
+      card.style.setProperty("--car-glow", c.accent);
+      card.innerHTML =
+        (owned ? "" : '<div class="lockmark">🔒</div>') +
+        '<canvas class="preview" width="128" height="200"></canvas>' +
+        '<div class="cn">' + c.name + '</div>' +
+        '<div class="cc">' + c.concept + '</div>' +
+        (owned ? '<span class="car-badge owned">' + (selected ? "선택됨" : "보유중") + '</span>'
+               : '<span class="car-badge cost">🪙 ' + c.cost + '</span>');
+      card.addEventListener("click", function () { onCarTap(c); });
+      grid.appendChild(card);
+      renderCarPreview(card.querySelector(".preview"), c.id, c.accent);
+    });
+
+    var trow = $("theme-row");
+    trow.innerHTML = "";
+    ["city", "desert"].forEach(function (id) {
+      var T = THEMES[id];
+      var locked = id === "desert" && save.bestDistance < DESERT_UNLOCK_M;
+      var selected = save.selectedTheme === id && !locked;
+      var card = document.createElement("button");
+      card.className = "theme-card" + (locked ? " locked" : "") + (selected ? " selected" : "");
+      card.innerHTML =
+        '<div class="te">' + (id === "city" ? "🏙️" : "🏜️") + '</div>' +
+        '<div class="tn">' + T.name + '</div>' +
+        '<div class="td">' + (locked ? "🔒 " + DESERT_UNLOCK_M + "m 기록 시 해금" : (selected ? "선택됨" : "탭해서 선택")) + '</div>';
+      card.addEventListener("click", function () { onThemeTap(id, locked); });
+      trow.appendChild(card);
+    });
+  }
+
+  function onCarTap(c) {
+    var owned = save.ownedCars.indexOf(c.id) !== -1;
+    sfx.tap();
+    if (owned) {
+      save.selectedCar = c.id; writeSave(); buildGarage();
+      return;
+    }
+    if (save.coins < c.cost) { sfx.deny(); toast("코인이 부족해요! (🪙" + c.cost + " 필요, 보유 🪙" + save.coins + ")"); return; }
+    openPanel(
+      '<div class="big">🪙</div><h2>' + c.name + ' 구매할까요?</h2>' +
+      '<p>' + c.concept + '<br>가격: 🪙 ' + c.cost + '</p>' +
+      '<div class="panel-btns" style="margin-top:16px">' +
+      '<button class="btn" data-act="buy" data-id="' + c.id + '">구매하고 바로 타기</button>' +
+      '<button class="btn ghost" data-act="close">아니요</button></div>'
+    );
+  }
+  function onThemeTap(id, locked) {
+    sfx.tap();
+    if (locked) { sfx.deny(); toast(THEMES.desert.name + "은 " + DESERT_UNLOCK_M + "m 기록을 달성하면 열려요!"); return; }
+    save.selectedTheme = id; writeSave(); buildGarage();
+  }
+
+  var toastTimer = null;
+  function toast(msg) {
+    var old = document.getElementById("garage-toast");
+    if (old) old.remove();
+    var t = el("", "position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1c1440;border:2px solid var(--line);color:#eef0fb;padding:10px 16px;border-radius:999px;font-size:13px;font-weight:700;z-index:200;box-shadow:0 6px 0 rgba(0,0,0,.4);max-width:88%;text-align:center");
+    t.id = "garage-toast"; t.textContent = msg;
+    document.body.appendChild(t);
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { t.remove(); }, 2200);
+  }
+
+  /* ============================================================
+     7. 게임 상태
+     ============================================================ */
+  var stage = $("stage"), canvas = $("game-canvas"), gctx = canvas.getContext("2d");
+  var dpr = 1, CW = 0, CH = 0;
+  var running = false, countingDown = false;
+  var themeId = "city", playerCarId = "muscle";
+  var player = { lane: 1, x: 0, targetX: 0, y: 0 };
+  var obstacles = [];
+  var scrollY = 0, distanceM = 0, coinAccum = 0, elapsedMs = 0, spawnTimer = 0;
+  var comboCount = 0, lastNearMissAt = -99999;
+  var lastFrameT = 0;
+
+  var seedBuildings = [], seedDuneFar = [], seedDuneNear = [], seedCacti = [], seedRocks = [], sandDrift = [], speedStreaks = [];
+  (function seed() {
+    for (var i = 0; i < 14; i++) seedBuildings.push({ side: i % 2, y: (i * 70) % 900, h: rand(70, 175), w: rand(28, 50), tall: i % 5 === 0 });
+    for (var j = 0; j < 9; j++) seedDuneFar.push({ side: j % 2, y: (j * 100) % 900, r: rand(80, 130) });
+    for (var k = 0; k < 8; k++) seedDuneNear.push({ side: k % 2, y: (k * 130 + 50) % 900, r: rand(55, 95) });
+    for (var c = 0; c < 6; c++) seedCacti.push({ side: c % 2, y: (c * 165 + 70) % 900, scale: rand(0.8, 1.35) });
+    for (var r = 0; r < 5; r++) seedRocks.push({ side: r % 2, y: (r * 195 + 100) % 900, scale: rand(0.8, 1.4) });
+    for (var p = 0; p < 40; p++) sandDrift.push({ x: rand(0, 1), y: rand(0.32, 1), sp: rand(0.3, 0.9), sz: rand(1, 2.4) });
+    for (var st = 0; st < 14; st++) speedStreaks.push({ side: st % 2, off: rand(6, 32), y0: rand(0, 900), len: rand(26, 70), sp: rand(1.2, 2.1), w: rand(1.4, 3) });
+  })();
+  function drawCactus(ctx, x, y, s) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.fillStyle = "#1c0f14";
+    ctx.fillRect(-4, -46, 8, 46); ctx.fillRect(-14, -30, 8, 20); ctx.fillRect(-14, -36, 8, 8); ctx.fillRect(6, -34, 8, 22); ctx.fillRect(6, -40, 8, 8);
+    ctx.restore();
+  }
+  function drawRock(ctx, x, y, s) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+    ctx.fillStyle = "#20141c";
+    ctx.beginPath();
+    ctx.moveTo(-16, 0); ctx.quadraticCurveTo(-14, -15, 0, -17); ctx.quadraticCurveTo(15, -14, 17, 1); ctx.quadraticCurveTo(9, 5, 0, 5); ctx.quadraticCurveTo(-9, 5, -16, 0);
+    ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+
+  function speedMulAt(ms) { return Math.min(SPEED_MAX, 1 + Math.floor(ms / SPEED_STEP_MS) * SPEED_STEP); }
+  function spawnIntervalAt(ms) { return Math.max(SPAWN_MIN, SPAWN_START - ms * SPAWN_DECAY); }
+
+  function fitCanvas() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var rect = stage.getBoundingClientRect();
+    CW = rect.width; CH = rect.height;
+    canvas.width = CW * dpr; canvas.height = CH * dpr;
+    gctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  window.addEventListener("resize", fitCanvas);
+
+  function laneX(i, roadX, roadW) { return roadX + (roadW / LANES) * (i + 0.5); }
+
+  function resetRun() {
+    obstacles = [];
+    scrollY = 0; distanceM = 0; coinAccum = 0; elapsedMs = 0; spawnTimer = spawnIntervalAt(0);
+    comboCount = 0; lastNearMissAt = -99999;
+    player.lane = 1;
+    var roadW = CW * 0.62, roadX = (CW - roadW) / 2;
+    player.x = player.targetX = laneX(1, roadX, roadW);
+    player.y = CH * 0.78;
+  }
+
+  function startCountdown() {
+    countingDown = true; running = false;
+    var seq = ["3", "2", "1", "출발!"];
+    var idx = 0;
+    var box = $("countdown"), txt = $("countdown-text");
+    box.style.display = "flex";
+    function step() {
+      txt.textContent = seq[idx];
+      txt.style.animation = "none"; void txt.offsetWidth; txt.style.animation = "";
+      sfx.tap();
+      idx++;
+      if (idx < seq.length) setTimeout(step, 650);
+      else setTimeout(function () { box.style.display = "none"; countingDown = false; running = true; lastFrameT = performance.now(); requestAnimationFrame(loop); }, 550);
+    }
+    step();
+  }
+
+  function goPlay() {
+    themeId = save.selectedTheme; playerCarId = save.selectedCar;
+    show("screen-play");
+    fitCanvas();
+    resetRun();
+    refreshPlayHud();
+    startCountdown();
+  }
+
+  function refreshPlayHud() {
+    $("hud-dist").textContent = Math.floor(distanceM);
+    $("hud-coin2").textContent = save.coins;
+  }
+
+  /* ============================================================
+     8. 입력
+     ============================================================ */
+  var steerHint = $("steer-hint"), steerHintTimer = null;
+  function showSteerHint() {
+    steerHint.classList.add("show");
+    clearTimeout(steerHintTimer);
+    steerHintTimer = setTimeout(function () { steerHint.classList.remove("show"); }, 200);
+  }
+  stage.addEventListener("pointerdown", function (e) {
+    if (!running || countingDown) return;
+    var rect = stage.getBoundingClientRect();
+    var relX = (e.clientX - rect.left) / rect.width;
+    steer(relX < 0.5 ? -1 : 1);
+  });
+  function steer(dir) {
+    var next = Math.max(0, Math.min(LANES - 1, player.lane + dir));
+    if (next === player.lane) return;
+    player.lane = next;
+    sfx.steer();
+    showSteerHint();
+  }
+
+  /* ============================================================
+     9. 스폰 / 충돌
+     ============================================================ */
+  function spawnWave(roadX, roadW) {
+    var count = elapsedMs < 15000 ? 1 : (elapsedMs < 35000 ? (Math.random() < 0.5 ? 1 : 2) : (Math.random() < 0.35 ? 3 : (Math.random() < 0.6 ? 2 : 1)));
+    var candidates = [0, 1, 2, 3];
+    if (elapsedMs < 3000) candidates = candidates.filter(function (l) { return l !== player.lane; });
+    candidates = candidates.sort(function () { return Math.random() - 0.5; });
+    count = Math.min(count, LANES - 1, candidates.length); // 최소 한 차선은 항상 비워둡니다
+    var chosen = candidates.slice(0, count);
+    var T = THEMES[themeId];
+    chosen.forEach(function (lane) {
+      obstacles.push({ lane: lane, y: -80, tone: pick(T.trafficTones), resolved: false, nearMissDone: false });
+    });
+  }
+
+  function trafficCar(ctx, x, yy, tone) {
+    ctx.save(); ctx.translate(x, yy);
+    ctx.filter = "blur(4px)"; ctx.fillStyle = "rgba(0,0,0,.5)";
+    ctx.beginPath(); ctx.ellipse(0, 10, 20, 10, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.filter = "none";
+    roundedPolygon(ctx, [{ x: -15, y: -26 }, { x: 15, y: -26 }, { x: 17, y: 22 }, { x: -17, y: 22 }], 6);
+    ctx.fillStyle = tone; ctx.fill();
+    ctx.fillStyle = "rgba(10,12,26,.85)"; ctx.fillRect(-11, -14, 22, 14);
+    ctx.save(); ctx.shadowColor = "#ff3d5e"; ctx.shadowBlur = 8; ctx.fillStyle = "#ff3d5e";
+    ctx.fillRect(-14, -25, 8, 4); ctx.fillRect(6, -25, 8, 4);
+    ctx.restore();
+    ctx.restore();
+  }
+
+  function triggerNearMiss(o) {
+    var now = elapsedMs;
+    comboCount = (now - lastNearMissAt < NEARMISS_COMBO_WINDOW) ? comboCount + 1 : 1;
+    lastNearMissAt = now;
+    var bonus = 40 * comboCount;
+    save.coins += bonus;
+    sfx.nearmiss(comboCount);
+    spawnPopup((comboCount > 1 ? "🔥 콤보 x" + comboCount + " " : "") + "+" + bonus + " 니어미스!");
+    refreshPlayHud();
+  }
+
+  var popups = [];
+  function spawnPopup(text) {
+    var roadW = CW * 0.62, roadX = (CW - roadW) / 2;
+    popups.push({ text: text, x: roadX + roadW / 2, y: CH * 0.36, born: elapsedMs });
+  }
+
+  function triggerCollision() {
+    running = false;
+    sfx.crash();
+    stage.classList.remove("shake"); void stage.offsetWidth; stage.classList.add("shake");
+    var isRecord = distanceM > save.bestDistance;
+    if (isRecord) save.bestDistance = distanceM;
+    writeSave();
+    setTimeout(function () { showGameOver(isRecord); }, 420);
+  }
+
+  function showGameOver(isRecord) {
+    if (isRecord) sfx.record();
+    var next = CARS.filter(function (c) { return save.ownedCars.indexOf(c.id) === -1; })[0];
+    var desertNowUnlocked = save.bestDistance >= DESERT_UNLOCK_M;
+    openPanel(
+      '<div class="big">' + (isRecord ? "🏆" : "💥") + '</div>' +
+      '<h2>' + (isRecord ? "신기록 달성!" : "충돌했어요!") + '</h2>' +
+      (isRecord ? '<div class="record-badge">⭐ 최고 기록 ' + Math.floor(save.bestDistance) + 'm' +
+        (desertNowUnlocked ? '<br>🏜️ 사막 야경 해금!' : '') + '</div>' : '') +
+      '<p>이번 기록: <b style="color:#eef0fb">' + Math.floor(distanceM) + 'm</b></p>' +
+      '<div class="reward">' +
+      '<span class="chip dist">🏁 최고 ' + Math.floor(save.bestDistance) + 'm</span>' +
+      '<span class="chip coin">🪙 ' + save.coins + '</span>' +
+      '</div>' +
+      '<div class="panel-btns">' +
+      '<button class="btn" data-act="retry">🔄 다시 도전</button>' +
+      '<button class="btn ghost" data-act="garage">차고로</button>' +
+      '</div>'
+    );
+  }
+
+  $("overlay").addEventListener("click", function (e) {
+    var act = e.target.dataset ? e.target.dataset.act : null;
+    if (!act) return;
+    sfx.tap(); closePanel();
+    if (act === "retry") { show("screen-play"); fitCanvas(); resetRun(); refreshPlayHud(); startCountdown(); }
+    else if (act === "garage") { buildGarage(); show("screen-garage"); }
+    else if (act === "buy") {
+      var id = e.target.dataset.id, c = carDef(id);
+      if (save.coins < c.cost) { sfx.deny(); toast("코인이 부족해요!"); return; }
+      save.coins -= c.cost; save.ownedCars.push(id); save.selectedCar = id; writeSave();
+      sfx.unlock(); buildGarage();
+    }
+    else if (act === "dowipe") { save = { coins: 0, bestDistance: 0, ownedCars: ["muscle"], selectedCar: "muscle", selectedTheme: "city" }; writeSave(); buildGarage(); }
+  });
+
+  /* ============================================================
+     10. 메인 루프
+     ============================================================ */
+  function loop(t) {
+    if (!running) return;
+    var dt = Math.min(48, t - lastFrameT); lastFrameT = t;
+    elapsedMs += dt;
+
+    var speedMul = speedMulAt(elapsedMs);
+    var moveBy = BASE_SCROLL * speedMul * dt;
+    scrollY += moveBy;
+
+    distanceM += (BASE_DIST_MPS * speedMul) * (dt / 1000);
+    coinAccum += (BASE_DIST_MPS * speedMul) * (dt / 1000) * COIN_PER_M;
+    if (coinAccum >= 1) { var whole = Math.floor(coinAccum); save.coins += whole; coinAccum -= whole; }
+
+    var roadW = CW * 0.62, roadX = (CW - roadW) / 2;
+    player.targetX = laneX(player.lane, roadX, roadW);
+    player.x += (player.targetX - player.x) * Math.min(1, dt * 0.014);
+
+    spawnTimer -= dt;
+    if (spawnTimer <= 0) { spawnWave(roadX, roadW); spawnTimer = spawnIntervalAt(elapsedMs) * rand(0.85, 1.15); }
+
+    var collideHalf = 34, nearHalf = 40;
+    for (var i = obstacles.length - 1; i >= 0; i--) {
+      var o = obstacles[i];
+      o.y += moveBy;
+      if (!o.resolved && Math.abs(o.y - player.y) < collideHalf) {
+        if (o.lane === player.lane) { o.resolved = true; triggerCollision(); }
+        else if (Math.abs(o.lane - player.lane) === 1 && !o.nearMissDone && Math.abs(o.y - player.y) < nearHalf) {
+          o.nearMissDone = true; triggerNearMiss(o);
+        }
+      }
+      if (o.y > CH + 80) obstacles.splice(i, 1);
+    }
+
+    refreshPlayHud();
+    drawFrame();
+    if (running) requestAnimationFrame(loop);
+  }
+
+  function drawFrame() {
+    var ctx = gctx, W = CW, H = CH, T = THEMES[themeId];
+    ctx.clearRect(0, 0, W, H);
+    var roadW = W * 0.62, roadX = (W - roadW) / 2, groundY = H * 0.3;
+
+    var sky = ctx.createLinearGradient(0, 0, 0, groundY);
+    sky.addColorStop(0, T.skyTop); sky.addColorStop(0.6, T.skyMid); sky.addColorStop(1, T.skyHorizon);
+    ctx.fillStyle = sky; ctx.fillRect(0, 0, W, groundY);
+
+    ctx.save(); ctx.shadowColor = T.moonGlow; ctx.shadowBlur = 24; ctx.fillStyle = T.moon;
+    ctx.beginPath(); ctx.arc(W * 0.76, H * 0.09, 14, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+    ctx.fillStyle = "rgba(" + T.star + ",.8)";
+    for (var s = 0; s < 24; s++) {
+      var sx = (s * 53.7) % W, sy = (s * 29.3) % (groundY * 0.9);
+      ctx.globalAlpha = 0.3 + 0.5 * Math.abs(Math.sin(elapsedMs * 0.001 + s));
+      ctx.fillRect(sx, sy, 1.6, 1.6);
+    }
+    ctx.globalAlpha = 1;
+
+    ctx.fillStyle = T.ground; ctx.fillRect(0, groundY, W, H - groundY);
+
+    if (themeId === "city") {
+      seedBuildings.forEach(function (b) {
+        var y = ((b.y + scrollY * 0.4) % (H + 220)) - 110;
+        var x = b.side === 0 ? roadX - b.w - 4 : roadX + roadW + 4;
+        var h = b.tall ? b.h * 1.6 : b.h;
+        ctx.fillStyle = "#171b3a"; ctx.fillRect(x, y - h, b.w, h);
+        for (var wy = 0; wy < h - 10; wy += 14) for (var wx = 4; wx < b.w - 8; wx += 12) {
+          ctx.fillStyle = ((wx + wy + b.y) % 37 < 14) ? "#ffd9a0" : "rgba(255,255,255,.06)";
+          ctx.fillRect(x + wx, y - h + wy + 4, 6, 8);
+        }
+        if (b.tall) {
+          ctx.save(); ctx.globalAlpha = 0.5 + 0.5 * Math.sin(elapsedMs * 0.006);
+          ctx.shadowColor = "#ff3d5e"; ctx.shadowBlur = 8; ctx.fillStyle = "#ff3d5e";
+          ctx.beginPath(); ctx.arc(x + b.w / 2, y - h - 4, 2.4, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        }
+      });
+    } else {
+      seedDuneFar.forEach(function (d) {
+        var y = ((d.y + scrollY * 0.22) % (H + 260)) - 130;
+        var x = d.side === 0 ? roadX * 0.5 : roadX + roadW + (W - roadX - roadW) * 0.5;
+        ctx.fillStyle = "#2a1830"; ctx.beginPath(); ctx.ellipse(x, y + groundY, d.r * 1.3, d.r * 0.55, 0, Math.PI, Math.PI * 2); ctx.fill();
+      });
+      seedDuneNear.forEach(function (d) {
+        var y = ((d.y + scrollY * 0.4) % (H + 220)) - 110;
+        var x = d.side === 0 ? roadX * 0.55 : roadX + roadW + (W - roadX - roadW) * 0.45;
+        ctx.fillStyle = "#6a3a2c"; ctx.beginPath(); ctx.ellipse(x, y + groundY, d.r * 1.25, d.r * 0.5, 0, Math.PI, Math.PI * 2); ctx.fill();
+      });
+      seedRocks.forEach(function (r) {
+        var y = ((r.y + scrollY * 0.45) % (H + 200)) - 100;
+        var x = r.side === 0 ? roadX * 0.7 : roadX + roadW + (W - roadX - roadW) * 0.3;
+        drawRock(ctx, x, y + groundY, r.scale);
+      });
+      seedCacti.forEach(function (c) {
+        var y = ((c.y + scrollY * 0.5) % (H + 200)) - 100;
+        var x = c.side === 0 ? roadX * 0.3 : roadX + roadW + (W - roadX - roadW) * 0.7;
+        drawCactus(ctx, x, y + groundY + 40, c.scale);
+      });
+      sandDrift.forEach(function (p) {
+        var x = ((p.x * W + elapsedMs * 0.02 * p.sp) % (W + 20)) - 10;
+        var y = p.y * H;
+        ctx.globalAlpha = 0.15 + 0.25 * Math.abs(Math.sin(elapsedMs * 0.001 + p.x * 10));
+        ctx.fillStyle = "#e8c9a0"; ctx.beginPath(); ctx.arc(x, y, p.sz, 0, Math.PI * 2); ctx.fill();
+      });
+      ctx.globalAlpha = 1;
+    }
+
+    ctx.fillStyle = T.asphalt; ctx.fillRect(roadX, groundY, roadW, H - groundY);
+    ctx.fillStyle = T.curb; ctx.globalAlpha = .85;
+    ctx.fillRect(roadX - 3, groundY, 3, H - groundY); ctx.fillRect(roadX + roadW, groundY, 3, H - groundY);
+    ctx.globalAlpha = 1;
+
+    speedStreaks.forEach(function (st) {
+      var x = st.side === 0 ? roadX - st.off : roadX + roadW + st.off;
+      var y = ((st.y0 + scrollY * st.sp) % (H - groundY + 220)) + groundY - 110;
+      var g = ctx.createLinearGradient(x, y - st.len, x, y);
+      g.addColorStop(0, "rgba(0,0,0,0)"); g.addColorStop(1, rgba(T.curb, 0.55));
+      ctx.strokeStyle = g; ctx.lineWidth = st.w; ctx.lineCap = "round";
+      ctx.beginPath(); ctx.moveTo(x, y - st.len); ctx.lineTo(x, y); ctx.stroke();
+    });
+
+    var dashLen = 34, gap = 15, phase = scrollY % (dashLen + gap);
+    for (var lane = 1; lane < LANES; lane++) {
+      var lx = roadX + (roadW / LANES) * lane;
+      ctx.strokeStyle = T.lane; ctx.lineWidth = 2.6;
+      ctx.setLineDash([dashLen, gap]); ctx.lineDashOffset = -phase;
+      ctx.beginPath(); ctx.moveTo(lx, groundY); ctx.lineTo(lx, H); ctx.stroke();
+      ctx.setLineDash([]);
+    }
+
+    obstacles.forEach(function (o) {
+      var x = laneX(o.lane, roadX, roadW);
+      if (o.y > -60 && o.y < H + 60) trafficCar(ctx, x, o.y, o.tone);
+    });
+
+    var carDefObj = carDef(playerCarId);
+    var pulse = 0.5 + 0.5 * Math.sin(elapsedMs * 0.02);
+    var trail = ctx.createLinearGradient(player.x, player.y + 8, player.x, player.y + 66);
+    trail.addColorStop(0, rgba(carDefObj.accent, 0.5 + 0.2 * pulse)); trail.addColorStop(1, rgba(carDefObj.accent, 0));
+    ctx.fillStyle = trail; ctx.beginPath(); ctx.ellipse(player.x, player.y + 34, 9, 30, 0, 0, Math.PI * 2); ctx.fill();
+
+    var bobY = reduceMotion ? 0 : Math.sin(elapsedMs * 0.006) * 2;
+    ctx.save(); ctx.translate(player.x, player.y + bobY); ctx.scale(0.62, 0.62);
+    drawCar(ctx, playerCarId, carDefObj.accent);
+    ctx.restore();
+
+    for (var pi = popups.length - 1; pi >= 0; pi--) {
+      var pu = popups[pi], age = elapsedMs - pu.born;
+      if (age > 950) { popups.splice(pi, 1); continue; }
+      var prog = age / 950;
+      ctx.save();
+      ctx.globalAlpha = prog < 0.2 ? prog / 0.2 : 1 - (prog - 0.2) / 0.8;
+      ctx.font = "800 15px ui-monospace, 'SF Mono', monospace";
+      ctx.fillStyle = "#ffcb3a"; ctx.shadowColor = "#ffcb3a"; ctx.shadowBlur = 10;
+      ctx.textAlign = "center";
+      ctx.fillText(pu.text, pu.x, pu.y - prog * 46);
+      ctx.restore();
+    }
+
+    var vg = ctx.createLinearGradient(0, H * 0.7, 0, H);
+    vg.addColorStop(0, "rgba(0,0,0,0)"); vg.addColorStop(1, "rgba(0,0,0,.4)");
+    ctx.fillStyle = vg; ctx.fillRect(0, H * 0.7, W, H * 0.3);
+  }
+
+  /* ============================================================
+     11. 버튼
+     ============================================================ */
+  $("btn-start").addEventListener("click", function () { audio(); sfx.tap(); buildGarage(); show("screen-garage"); });
+  $("btn-help").addEventListener("click", function () {
+    audio(); sfx.tap();
+    openPanel(
+      '<div class="big">🏎️</div><h2>이렇게 하면 돼!</h2>' +
+      '<div class="help-list">' +
+      '1. 차고에서 <b>차와 배경</b>을 고르고 출발해요<br>' +
+      '2. 화면 <b>왼쪽/오른쪽을 탭</b>해서 차선을 바꿔요<br>' +
+      '3. 다가오는 차에 <b>부딪히면 게임오버</b>예요<br>' +
+      '4. <b>아슬아슬하게 스치면</b> 니어미스 콤보 보너스!<br>' +
+      '5. 시간이 지날수록 <b>다가오는 차가 많아져요</b><br>' +
+      '6. 달린 거리만큼 <b>코인이 쌓이고</b>, 코인으로 새 차를 사요<br>' +
+      '7. <b>800m</b>를 달성하면 사막 야경이 열려요' +
+      '</div><div class="panel-btns"><button class="btn" data-act="close">알겠어!</button></div>'
+    );
+  });
+  $("btn-reset").addEventListener("click", function () {
+    sfx.tap();
+    openPanel(
+      '<div class="big">🗑️</div><h2>기록을 지울까요?</h2>' +
+      '<p>코인, 최고 기록, 보유 차량이 모두 사라져요.</p>' +
+      '<div class="panel-btns" style="margin-top:16px">' +
+      '<button class="btn ghost" data-act="dowipe">네, 지울래요</button>' +
+      '<button class="btn" data-act="close">아니요</button></div>'
+    );
+  });
+  $("btn-garage-back").addEventListener("click", function () { sfx.tap(); show("screen-title"); });
+  $("btn-go").addEventListener("click", function () { sfx.tap(); goPlay(); });
+  $("btn-play-back").addEventListener("click", function () {
+    running = false; countingDown = false; sfx.tap();
+    if (distanceM > save.bestDistance) { save.bestDistance = distanceM; writeSave(); }
+    buildGarage(); show("screen-garage");
+  });
+
+  (function () {
+    var box = $("title-stars");
+    for (var i = 0; i < 34; i++) {
+      var s = document.createElement("i");
+      s.style.left = rand(0, 100).toFixed(2) + "%"; s.style.top = rand(0, 70).toFixed(2) + "%";
+      s.style.animationDelay = rand(0, 3).toFixed(2) + "s";
+      box.appendChild(s);
+    }
+  })();
+
+  loadSave();
+
+  // 자동화 테스트용 훅 — 플레이에는 영향 없이 상태 확인 / 시나리오 유발만 합니다
+  window.__scGame = {
+    state: function () { return { running: running, countingDown: countingDown, distanceM: distanceM, coins: save.coins, obstacleCount: obstacles.length, playerLane: player.lane, elapsedMs: elapsedMs, comboCount: comboCount, bestDistance: save.bestDistance }; },
+    spawnObstacleAtPlayerLane: function () { obstacles.push({ lane: player.lane, y: player.y - 6, tone: "#3a4166", resolved: false, nearMissDone: false }); },
+    spawnNearMissAdjacent: function () { var l = player.lane === 0 ? 1 : player.lane - 1; obstacles.push({ lane: l, y: player.y - 6, tone: "#3a4166", resolved: false, nearMissDone: false }); },
+    save: function () { return save; }
+  };
+})();
+</script>
+</body>
+</html>
