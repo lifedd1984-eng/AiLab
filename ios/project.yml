@@ -17,6 +17,9 @@ targets:
   QuickChecklist:
     type: application
     platform: iOS
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.quickchecklist
     sources:
       - ChecklistApp
       - Shared
@@ -44,6 +47,10 @@ targets:
   ChecklistWidget:
     type: app-extension
     platform: iOS
+    settings:
+      base:
+        # 익스텐션 번들 ID는 반드시 앱 번들 ID의 하위여야 함 (ValidateEmbeddedBinary)
+        PRODUCT_BUNDLE_IDENTIFIER: com.example.quickchecklist.widget
     sources:
       - ChecklistWidget
       - Shared
