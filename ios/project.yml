@@ -1,0 +1,62 @@
+# XcodeGen 프로젝트 정의 — `xcodegen generate`로 .xcodeproj 생성
+# 사용 전 변경 필요: bundleIdPrefix와 App Group ID (SETUP.md 참고)
+name: QuickChecklist
+options:
+  bundleIdPrefix: com.example
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    TARGETED_DEVICE_FAMILY: "1"   # iPhone 전용
+    CODE_SIGN_STYLE: Automatic
+
+targets:
+  QuickChecklist:
+    type: application
+    platform: iOS
+    sources:
+      - ChecklistApp
+      - Shared
+    entitlements:
+      path: ChecklistApp/ChecklistApp.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.example.quickchecklist
+    info:
+      path: ChecklistApp/Info.plist
+      properties:
+        CFBundleDisplayName: 빠른 체크리스트
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        UILaunchScreen: {}
+        ITSAppUsesNonExemptEncryption: false
+        CFBundleURLTypes:
+          - CFBundleURLName: checklist-deeplink
+            CFBundleURLSchemes:
+              - checklist
+    dependencies:
+      - target: ChecklistWidget
+        embed: true
+
+  ChecklistWidget:
+    type: app-extension
+    platform: iOS
+    sources:
+      - ChecklistWidget
+      - Shared
+    entitlements:
+      path: ChecklistWidget/ChecklistWidget.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.example.quickchecklist
+    info:
+      path: ChecklistWidget/Info.plist
+      properties:
+        CFBundleDisplayName: 빠른 체크리스트
+        CFBundleShortVersionString: "1.0"
+        CFBundleVersion: "1"
+        NSExtension:
+          NSExtensionPointIdentifier: com.apple.widgetkit-extension

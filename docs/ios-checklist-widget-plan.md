@@ -226,7 +226,7 @@ final class ChecklistItem {
 }
 ```
 
-- 저장소: **SwiftData**, 컨테이너를 **App Group** (`group.com.<팀>.checklist`)에 배치.
+- 저장소: **App Group 컨테이너 내 JSON 파일** (Codable). — *구현 시 변경(2026-08-09): 원안은 SwiftData였으나, 200개 이하 목록엔 성능 차이가 없고 위젯 익스텐션과의 컨테이너 공유 설정·스키마 관리 공수가 통째로 사라져 JSON 파일로 확정. 필드 구성은 아래와 동일.*
 - 앱과 위젯 익스텐션은 **별개 프로세스**이므로, App Group 없이는 저장소 공유가 불가능하다. 설정 누락 시 위젯이 항상 빈 목록 → **1단계에서 최우선 검증**.
 - `completedAt`이 7일 이전인 항목은 앱 실행 시 삭제 (v1.0에서 기간 설정 UI는 없음).
 - 리스트 분리(v1.1) 대비: v1.1에서 `listKind` 필드를 추가하는 마이그레이션으로 대응. v1.0 스키마에 미리 넣지 않는다(죽은 필드 금지).
@@ -241,7 +241,7 @@ final class ChecklistItem {
 | UI | SwiftUI | 앱/위젯 뷰 코드 공유 |
 | 위젯 | WidgetKit (`systemMedium`, `systemLarge`) | |
 | 위젯 상호작용 | **AppIntent** — `CompleteItemIntent(id:)` | 위젯 버튼 → Intent가 익스텐션 프로세스에서 저장소 수정 → 타임라인 자동 갱신 |
-| 저장소 | SwiftData + App Group | 서버 없이 앱↔위젯 공유 |
+| 저장소 | JSON 파일 + App Group (구현 시 SwiftData에서 변경 — §8 참고) | 서버 없이 앱↔위젯 공유, 공수 최소 |
 | 동기화 | 없음 (v1.0 로컬 전용) | v2에서 CloudKit |
 
 ### 위젯 갱신 정책
