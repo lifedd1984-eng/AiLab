@@ -3,7 +3,7 @@ package com.simpleflashlight
 import android.appwidget.AppWidgetManager
 import android.content.ComponentName
 import android.os.Bundle
-import android.view.ViewGroup
+import android.view.View
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity() {
 
         Prefs.AUTO_OFF_CHOICES.forEach { minutes ->
             val button = RadioButton(this).apply {
-                id = ViewGroup.generateViewId()
+                id = View.generateViewId()
                 tag = minutes
                 text = if (minutes == 0) {
                     getString(R.string.auto_off_never)
