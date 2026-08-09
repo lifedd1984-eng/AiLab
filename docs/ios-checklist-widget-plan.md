@@ -339,6 +339,8 @@ Checklist/
 
 데이터 모델 영향: `Category { id, name, icon, sortOrder }` 추가, `ChecklistItem`에 `categoryID` 추가, 완료 항목은 `archived` 플래그(정리 전 `isDone`, 정리 후 `archived`)로 구분. 일정 영향 약 +3~4일.
 
+4. **Android 지원 추가** (2026-08-09 확정) — §3의 "Android 제외"를 뒤집어 v1.0에 포함. 구현 방식은 **네이티브 2벌**: iOS(SwiftUI + WidgetKit, `ios/`) / Android(Jetpack Compose + Glance 위젯, `android/`). 크로스플랫폼 프레임워크는 배제 — 핵심인 홈 화면 위젯이 양쪽 모두 네이티브 필수라 공수 절감 효과가 없고 툴체인만 늘어난다. 두 구현은 동일한 데이터 스키마·기능 명세를 공유한다. Android는 위젯이 앱과 같은 프로세스라 App Group이 불필요하고, 위젯 자유 리사이즈 덕분에 **원 요청이었던 1행 "긴 막대" 형태도 가능**하다.
+
 ## 16. 다음 단계
 
 1. ~~§14 열린 질문 회신~~ 완료 — 전 항목 가안 확정

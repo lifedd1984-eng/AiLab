@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">빠른 체크리스트</string>
+    <string name="widget_description">앱을 열지 않고 홈 화면에서 바로 체크하세요.</string>
+</resources>
