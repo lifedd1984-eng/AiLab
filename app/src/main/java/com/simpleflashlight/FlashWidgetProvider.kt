@@ -6,6 +6,8 @@ import android.appwidget.AppWidgetProvider
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.os.Build
+import android.util.SizeF
 import android.widget.RemoteViews
 import androidx.core.content.ContextCompat
 
@@ -64,8 +66,25 @@ class FlashWidgetProvider : AppWidgetProvider() {
             ids.forEach { manager.updateAppWidget(it, views) }
         }
 
+        /**
+         * The widget can be stretched on the home screen, so it ships in two sizes and lets the
+         * launcher pick. Below Android 12 there is no size-mapped RemoteViews, but the compact
+         * layout weights its glyph, so it still fills whatever space it is given.
+         */
         private fun buildViews(context: Context, isOn: Boolean): RemoteViews {
-            val views = RemoteViews(context.packageName, R.layout.widget_flash)
+            val compact = buildViews(context, isOn, R.layout.widget_flash)
+            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) return compact
+
+            return RemoteViews(
+                mapOf(
+                    SizeF(72f, 72f) to compact,
+                    SizeF(128f, 128f) to buildViews(context, isOn, R.layout.widget_flash_large)
+                )
+            )
+        }
+
+        private fun buildViews(context: Context, isOn: Boolean, layoutRes: Int): RemoteViews {
+            val views = RemoteViews(context.packageName, layoutRes)
 
             views.setInt(
                 R.id.widget_root,
