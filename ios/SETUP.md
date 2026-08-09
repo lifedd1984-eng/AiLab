@@ -84,7 +84,25 @@ Apple 정책상 IPA는 **서명 없이는 아이폰에 설치할 수 없습니�
    - 무료 Apple ID는 **7일마다 재서명** 필요, 앱 3개 제한
    - ⚠️ 위젯↔앱 데이터 공유(App Group)는 사이드로딩 도구가 그룹 ID를 재작성해야 동작합니다. Sideloadly 옵션에서 app group 처리를 켜세요. 도구 처리에 따라 위젯이 빈 목록일 수 있음 — 이 경우 Mac+Xcode 방식이 확실합니다.
 
-2. **정식 배포** — Apple Developer Program(연 $99) 가입 후 TestFlight. CI에 서명 키를 등록하면 빌드→TestFlight 업로드까지 자동화 가능 (계정 생기면 요청).
+2. **정식 배포 (TestFlight)** — 아래 "TestFlight 자동 업로드" 참고. 아이폰에서 가장 편한 최종 형태.
+
+## TestFlight 자동 업로드 (CI 준비 완료 — 계정만 있으면 됨)
+
+`.github/workflows/ios-testflight.yml`이 서명·업로드까지 자동으로 합니다. 한 번만 하면 되는 준비:
+
+1. **Apple Developer Program 가입** — https://developer.apple.com (연 $99, 승인까지 최대 1~2일)
+2. **Team ID 확인** — developer.apple.com → Membership 페이지의 10자리 Team ID
+3. **API 키 생성** — App Store Connect → 사용자 및 액세스 → 통합 → App Store Connect API → 키 생성 (권한: **App Manager**). Key ID·Issuer ID를 적어두고 `.p8` 파일 다운로드 (1회만 다운로드 가능)
+4. **App Store Connect에서 앱 생성** — 나의 앱 → ＋ → 신규 앱: 이름 "빠른 체크리스트", 번들 ID `com.lifedd.quickchecklist` (식별자 목록에 없으면 developer.apple.com → Identifiers에서 먼저 등록, App Groups capability 체크)
+5. **GitHub Secrets 등록** — 저장소 → Settings → Secrets and variables → Actions → New repository secret:
+   - `ASC_KEY_ID`: API 키의 Key ID
+   - `ASC_ISSUER_ID`: Issuer ID
+   - `ASC_KEY_P8`: `.p8` 파일을 텍스트 편집기로 열어 내용 전체 붙여넣기
+   - `APPLE_TEAM_ID`: Team ID
+6. **실행** — 저장소 → Actions → "iOS TestFlight" → Run workflow
+7. 10~15분 후 App Store Connect → TestFlight에 빌드가 나타남 → 내부 테스트 그룹에 본인 추가 → 아이폰의 TestFlight 앱에서 설치. 이후는 워크플로만 다시 돌리면 새 버전이 TestFlight로 갑니다.
+
+> 번들 ID 기본값은 `com.lifedd.quickchecklist` (App Group: `group.com.lifedd.quickchecklist`)로 설정돼 있습니다. 다른 ID를 쓰려면 `project.yml`(4곳)과 `Shared/ChecklistStore.swift`(1곳)를 함께 바꾸세요.
 
 ## 남은 작업 (다음 단계)
 

@@ -2,7 +2,7 @@
 # 사용 전 변경 필요: bundleIdPrefix와 App Group ID (SETUP.md 참고)
 name: QuickChecklist
 options:
-  bundleIdPrefix: com.example
+  bundleIdPrefix: com.lifedd
   deploymentTarget:
     iOS: "17.0"
   createIntermediateGroups: true
@@ -19,7 +19,7 @@ targets:
     platform: iOS
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.quickchecklist
+        PRODUCT_BUNDLE_IDENTIFIER: com.lifedd.quickchecklist
     sources:
       - ChecklistApp
       - Shared
@@ -27,7 +27,7 @@ targets:
       path: ChecklistApp/ChecklistApp.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.example.quickchecklist
+          - group.com.lifedd.quickchecklist
     info:
       path: ChecklistApp/Info.plist
       properties:
@@ -50,7 +50,7 @@ targets:
     settings:
       base:
         # 익스텐션 번들 ID는 반드시 앱 번들 ID의 하위여야 함 (ValidateEmbeddedBinary)
-        PRODUCT_BUNDLE_IDENTIFIER: com.example.quickchecklist.widget
+        PRODUCT_BUNDLE_IDENTIFIER: com.lifedd.quickchecklist.widget
     sources:
       - ChecklistWidget
       - Shared
@@ -58,7 +58,7 @@ targets:
       path: ChecklistWidget/ChecklistWidget.entitlements
       properties:
         com.apple.security.application-groups:
-          - group.com.example.quickchecklist
+          - group.com.lifedd.quickchecklist
     info:
       path: ChecklistWidget/Info.plist
       properties:

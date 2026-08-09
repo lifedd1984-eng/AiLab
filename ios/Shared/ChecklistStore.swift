@@ -3,7 +3,7 @@ import Foundation
 /// 앱과 위젯 익스텐션이 공유하는 저장소.
 /// App Group 컨테이너의 store.json 하나가 단일 소스 — 마지막 쓰기 승리(§10).
 final class ChecklistStore {
-    static let appGroupID = "group.com.example.quickchecklist"
+    static let appGroupID = "group.com.lifedd.quickchecklist"
     static let shared = ChecklistStore()
 
     private let fileURL: URL?
