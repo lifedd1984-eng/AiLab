@@ -69,6 +69,23 @@ ios/
 - **ChecklistKit SPM 패키지 → Shared 폴더 소스 공유.** 타깃 2개 규모에서 패키지는 과함.
 - Android 버전은 `../android/` — 같은 스키마·같은 명세의 네이티브 구현.
 
+## Mac 없이 아이폰에 설치하기 (무서명 IPA + 사이드로딩)
+
+CI(macOS 러너)가 무서명 IPA를 자동 빌드해 릴리스에 올립니다:
+https://github.com/lifedd1984-eng/test1/releases/tag/checklist-ipa
+
+Apple 정책상 IPA는 **서명 없이는 아이폰에 설치할 수 없습니다.** 서명 방법 두 가지:
+
+1. **Sideloadly (Windows/Mac PC 필요)** — 가장 현실적
+   1. PC에 [Sideloadly](https://sideloadly.io)와 iTunes(Windows) 설치
+   2. 아이폰을 USB로 연결하고 `QuickChecklist-unsigned.ipa`를 Sideloadly에 드래그
+   3. 본인 Apple ID 입력 → Advanced에서 **"Signing Mode: Apple ID"** 그대로, 번들 ID는 자동 변경 허용
+   4. 설치 후 아이폰의 설정 → 일반 → VPN 및 기기 관리에서 본인 Apple ID 신뢰
+   - 무료 Apple ID는 **7일마다 재서명** 필요, 앱 3개 제한
+   - ⚠️ 위젯↔앱 데이터 공유(App Group)는 사이드로딩 도구가 그룹 ID를 재작성해야 동작합니다. Sideloadly 옵션에서 app group 처리를 켜세요. 도구 처리에 따라 위젯이 빈 목록일 수 있음 — 이 경우 Mac+Xcode 방식이 확실합니다.
+
+2. **정식 배포** — Apple Developer Program(연 $99) 가입 후 TestFlight. CI에 서명 키를 등록하면 빌드→TestFlight 업로드까지 자동화 가능 (계정 생기면 요청).
+
 ## 남은 작업 (다음 단계)
 
 순서 변경(길게 눌러 드래그), 항목 딥링크 시 해당 행으로 스크롤·강조, 카테고리 이름 변경/삭제, 앱 아이콘.

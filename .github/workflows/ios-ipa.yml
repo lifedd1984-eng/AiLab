@@ -1,0 +1,58 @@
+name: iOS IPA (unsigned)
+
+on:
+  push:
+    branches: ["claude/**", "main"]
+    paths: ["ios/**", ".github/workflows/ios-ipa.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode project
+        working-directory: ios
+        run: xcodegen generate
+
+      - name: Build unsigned app
+        working-directory: ios
+        run: |
+          xcodebuild \
+            -project QuickChecklist.xcodeproj \
+            -scheme QuickChecklist \
+            -configuration Release \
+            -sdk iphoneos \
+            -derivedDataPath build \
+            CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+
+      - name: Package IPA
+        working-directory: ios
+        run: |
+          mkdir -p Payload
+          cp -R build/Build/Products/Release-iphoneos/QuickChecklist.app Payload/
+          zip -qry QuickChecklist-unsigned.ipa Payload
+
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickchecklist-unsigned-ipa
+          path: ios/QuickChecklist-unsigned.ipa
+          if-no-files-found: error
+
+      - name: Publish IPA to release (fixed download link)
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view checklist-ipa --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1 || \
+            gh release create checklist-ipa --repo "$GITHUB_REPOSITORY" \
+              --title "빠른 체크리스트 — iOS IPA (무서명)" \
+              --notes "무서명 개발 빌드입니다. 아이폰에 바로 설치는 불가능하며, PC/Mac에서 Sideloadly 또는 AltStore로 본인 Apple ID 서명 후 설치하세요 (ios/SETUP.md 참고). 최신 커밋 빌드로 자동 갱신됩니다."
+          gh release upload checklist-ipa ios/QuickChecklist-unsigned.ipa --repo "$GITHUB_REPOSITORY" --clobber
