@@ -113,10 +113,17 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   box-shadow: 0 6px 18px rgba(25,45,35,.16);
 }
 .widget.dark { background: rgba(28,30,29,.95); color: #eef1ee; }
-.widget-head { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 7px; cursor: pointer; }
-.widget-head .t { font-size: 13px; font-weight: 700; }
-.widget-head .n { font-size: 12px; font-weight: 600; color: #1f9d5b; }
-.widget.dark .widget-head .n { color: #52cf87; }
+.wchips { display: flex; gap: 5px; margin-bottom: 8px; overflow: hidden; }
+.wchip {
+  appearance: none; border: 0; font: inherit; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; gap: 4px;
+  font-size: 11.5px; font-weight: 700; border-radius: 999px; padding: 3.5px 10px;
+  background: #edf0ec; color: #4c564f;
+}
+.wchip .c { font-size: 10.5px; opacity: .7; }
+.wchip.on { background: #1f9d5b; color: #fff; }
+.widget.dark .wchip { background: #343a36; color: #cfd6d0; }
+.widget.dark .wchip.on { background: #1f9d5b; color: #fff; }
 .wrow { display: flex; align-items: center; gap: 9px; padding: 4.5px 0; }
 .wcheck {
   appearance: none; -webkit-appearance: none; cursor: pointer; flex-shrink: 0;
@@ -143,14 +150,6 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .widget-stage .widget { width: 300px; }
 .stage-row { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
 .stage-cap { font-size: 13px; color: var(--muted); margin-top: 10px; max-width: 300px; }
-
-/* 위젯 카테고리 선택 시뮬레이션 (목업 전용 컨트롤) */
-.wcat-picker { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
-.wcat-picker button {
-  appearance: none; border: 1px solid var(--line); background: var(--surface); color: var(--ink);
-  font: inherit; font-size: 13px; font-weight: 600; border-radius: 999px; padding: 4px 12px; cursor: pointer;
-}
-.wcat-picker button.on { background: var(--accent); border-color: var(--accent); color: #fff; }
 
 /* ---------- 앱 화면 ---------- */
 .appscreen { background: #f5f6f4; color: #1a211c; }
@@ -276,11 +275,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   <section>
     <div class="section-head">
       <h2>1. 홈 화면 — 중형 위젯 (4×2)</h2>
-      <p>위젯은 카테고리 하나를 보여줍니다. 실제 iOS에서는 위젯을 길게 눌러 "편집"에서 표시할 카테고리를 고르며, 아래 회색 버튼이 그 시뮬레이션입니다.</p>
+      <p>위젯 상단에 카테고리 칩이 나란히 표시되고, 칩을 탭하면 <b>앱을 열지 않고 위젯 안에서</b> 해당 카테고리 목록으로 전환됩니다 (iOS 17 위젯 버튼).</p>
     </div>
     <div class="duo">
       <div>
-        <div class="wcat-picker"><span>위젯 편집 →</span><span id="wcatBtns"></span></div>
         <div class="iphone"><div class="screen home">
           <div class="island"></div>
           <div class="statusbar"><span>9:41</span><span>􀙇 􀛨</span></div>
@@ -301,10 +299,10 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
         </div></div>
       </div>
       <div class="notes">
-        <div class="note"><span class="dot">1</span><p><b>헤더 = 카테고리 이름</b> — "🛒 살 것 · 남은 개수". 위젯 하나가 카테고리 하나를 담당하고, 카테고리별로 위젯을 여러 개 나란히 둘 수도 있습니다.</p></div>
+        <div class="note"><span class="dot">1</span><p><b>카테고리 칩 행</b> — "🛒 살 것 3" "📝 할 것 2"처럼 카테고리와 남은 개수가 나란히. <b>칩 탭 = 위젯 안에서 즉시 전환</b>, 앱이 열리지 않습니다. 앱에서 카테고리를 추가하면 칩도 늘어납니다.</p></div>
         <div class="note"><span class="dot">2</span><p><b>◯ 체크 → 줄긋기 유지</b> — 항목이 사라지지 않고 취소선 상태로 남습니다. 다시 탭하면 체크 해제(실행 취소).</p></div>
-        <div class="note"><span class="dot">3</span><p><b>남은 개수</b>는 체크 안 된 항목만 셉니다. 전부 체크되면 "다 했어요 🎉".</p></div>
-        <div class="note"><span class="dot">4</span><p><b>텍스트 탭</b> → 앱의 해당 카테고리·항목으로 이동, <b>헤더 탭</b> → 해당 카테고리 입력창으로. (목업에서는 아래 앱 화면으로 스크롤)</p></div>
+        <div class="note"><span class="dot">3</span><p><b>칩의 숫자</b>는 체크 안 된 항목만 셉니다. 칩이 많아 다 안 보이면 표시 우선순위는 최근 사용 순(칩 행은 1줄 고정).</p></div>
+        <div class="note"><span class="dot">4</span><p><b>텍스트 탭</b> → 앱의 해당 카테고리·항목으로 이동, <b>빈 영역 탭</b> → 해당 카테고리 입력창으로. (목업에서는 아래 앱 화면으로 스크롤)</p></div>
       </div>
     </div>
   </section>
@@ -425,9 +423,11 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   function widgetHTML(max) {
     var cat = catById(widgetCat) || cats[0];
     if (!cat) return "";
-    var remaining = cat.items.filter(function (it) { return !it.checked; }).length;
-    var html = '<div class="widget-head" data-act="add"><span class="t">' + cat.icon + " " + esc(cat.name) +
-      '</span><span class="n">' + (cat.items.length ? (remaining ? remaining + "개" : "다 했어요 🎉") : "") + "</span></div>";
+    var html = '<div class="wchips">' + cats.map(function (c) {
+      var rem = c.items.filter(function (it) { return !it.checked; }).length;
+      return '<button class="wchip' + (c.id === widgetCat ? " on" : "") + '" data-cat="' + c.id + '">' +
+        c.icon + " " + esc(c.name) + '<span class="c">' + rem + "</span></button>";
+    }).join("") + "</div>";
     if (!cat.items.length) {
       html += '<div class="wempty" data-act="add">목록이 비었어요<small>탭해서 새 항목 추가</small></div>';
       return html;
@@ -447,10 +447,6 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
     document.getElementById("wMedium").innerHTML = widgetHTML(3);
     document.getElementById("wLarge").innerHTML = widgetHTML(8);
     document.getElementById("wDark").innerHTML = widgetHTML(3);
-    var btns = cats.map(function (c) {
-      return '<button data-cat="' + c.id + '"' + (c.id === widgetCat ? ' class="on"' : "") + ">" + c.icon + " " + esc(c.name) + "</button>";
-    }).join(" ");
-    document.getElementById("wcatBtns").innerHTML = btns;
   }
 
   /* ---------- 앱: 카테고리 칩 ---------- */
@@ -579,15 +575,17 @@ button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   /* ---------- 이벤트 ---------- */
   ["wMedium", "wLarge", "wDark"].forEach(function (wid) {
     document.getElementById(wid).addEventListener("click", function (e) {
+      var chip = e.target.closest(".wchip");
+      if (chip) { // SelectCategoryIntent — 앱 안 열림
+        widgetCat = +chip.dataset.cat;
+        renderWidgets();
+        return;
+      }
       var row = e.target.closest(".wrow");
       if (e.target.classList.contains("wcheck") && row) { toggleCheck(+row.dataset.id); return; }
       if (e.target.classList.contains("wtitle") && row) { deepLink(+row.dataset.id); return; }
       if (e.target.closest("[data-act='add']")) { deepLink(null); }
     });
-  });
-  document.getElementById("wcatBtns").addEventListener("click", function (e) {
-    var b = e.target.closest("button[data-cat]");
-    if (b) { widgetCat = +b.dataset.cat; renderWidgets(); }
   });
 
   function deepLink(itemID) {
