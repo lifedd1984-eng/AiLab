@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="screen_background">#10131A</color>
+    <color name="surface_dark">#22262F</color>
+    <color name="amber">#FFC400</color>
+
+    <!-- Foreground used while the light is OFF (amber on dark) -->
+    <color name="off_foreground">#FFC400</color>
+    <!-- Foreground used while the light is ON (dark on amber) -->
+    <color name="on_foreground">#1A1400</color>
+
+    <color name="muted_text">#B8BEC9</color>
+</resources>

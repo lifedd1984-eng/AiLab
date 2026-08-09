@@ -1,0 +1,48 @@
+name: Build APK
+
+on:
+  push:
+    branches: ["**"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.7"
+
+      - name: Build APK
+        run: gradle assembleRelease --no-daemon --stacktrace
+
+      - name: Collect APK
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/release/app-release.apk dist/flashlight.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: flashlight-apk
+          path: dist/flashlight.apk
+
+      # Publishes a stable download link so the APK can be installed straight from the phone.
+      - name: Publish latest APK release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release delete apk-latest --yes --cleanup-tag || true
+          gh release create apk-latest dist/flashlight.apk \
+            --title "손전등 APK (최신)" \
+            --notes "휴대폰 크롬으로 이 페이지를 열고 flashlight.apk 를 눌러 설치하세요." \
+            --prerelease

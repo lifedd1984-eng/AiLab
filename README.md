@@ -1,14 +1,81 @@
-# test1
+# 손전등 (Simple Flashlight)
 
-This repository was set up while testing a remote Claude Code session
-("remote control") — running Claude Code from the web or mobile app against
-a GitHub repository in an isolated cloud environment.
+어르신이 쓰기 쉬운 안드로이드 손전등 앱입니다.
+**홈 화면 위젯을 한 번 누르면 앱이 열리지 않고 그 자리에서 불이 켜지고 꺼집니다.**
 
-This commit confirms the end-to-end pipeline works:
+- 위젯 한 번 탭 = 켜기 / 한 번 더 탭 = 끄기
+- 위젯이 켜짐(노란색) / 꺼짐(검은색)을 크게 보여 줍니다
+- 정해진 시간이 지나면 **자동으로 꺼져서** 배터리가 닳지 않습니다 (기본 5분)
+- 카메라 권한을 묻지 않습니다 (안드로이드의 플래시 제어 기능만 사용)
 
-- The remote session cloned the repository into an ephemeral container.
-- Changes were committed on the branch `claude/remote-control-p1smnd`.
-- The branch was pushed back to GitHub from the remote environment.
+---
 
-Learn more about Claude Code on the web:
-https://code.claude.com/docs/en/claude-code-on-the-web
+## 1. 설치하기
+
+### APK 내려받기
+
+이 저장소에 코드를 올리면 GitHub이 자동으로 APK를 만들어 줍니다.
+
+1. GitHub 저장소의 **Actions** 탭에서 `Build APK`가 초록색 체크로 끝났는지 확인합니다.
+2. 저장소 오른쪽의 **Releases → `apk-latest`** 로 들어갑니다.
+3. **아버지 휴대폰의 크롬으로** 그 Releases 페이지를 열고 `flashlight.apk` 를 누릅니다.
+   (링크를 카카오톡으로 보내 드리면 제일 간편합니다.)
+
+### 휴대폰에서 설치
+
+APK를 처음 설치할 때는 안드로이드가 한 번 물어봅니다.
+
+1. 다운로드된 `flashlight.apk` 를 누릅니다
+2. "이 출처의 앱 설치" 안내가 나오면 **설정 → 허용** 을 켭니다
+3. 뒤로 가서 다시 누르면 설치됩니다
+
+> 직접 빌드하려면: Android Studio로 이 폴더를 열고 `앱 실행`, 또는 터미널에서 `./gradlew assembleRelease`
+
+---
+
+## 2. 홈 화면에 위젯 놓기 (제일 중요)
+
+**쉬운 방법** — 앱을 열고 **`홈 화면에 위젯 추가하기`** 버튼을 누르면 위젯이 자동으로 놓입니다.
+
+**직접 놓는 방법**
+
+1. 홈 화면의 빈 곳을 **길게 누릅니다**
+2. 아래에 나오는 **위젯** 을 누릅니다
+3. 목록에서 **손전등** 을 찾아 길게 눌러 홈 화면으로 끌어다 놓습니다
+
+위젯은 아이콘 한 칸(1×1) 크기이고, 자유롭게 늘릴 수 있습니다.
+아버지께서 **가장 자주 보시는 홈 화면 첫 페이지, 손가락이 닿기 쉬운 아래쪽**에 두시길 권합니다.
+
+---
+
+## 3. 자동 꺼짐 시간 바꾸기
+
+앱을 열면 아래쪽에 **자동으로 꺼지는 시간**을 고를 수 있습니다.
+
+- 3분 / 5분(기본) / 10분 / 30분 / 자동으로 끄지 않기
+
+주머니에 넣고 잊어버리셔도 알아서 꺼지므로, **5분이나 10분**을 권합니다.
+
+---
+
+## 4. 구조
+
+| 파일 | 하는 일 |
+| --- | --- |
+| `FlashWidgetProvider.kt` | 홈 화면 위젯. 탭을 받아 불을 켜고 끄고, 위젯 모양을 다시 그림 |
+| `Flashlight.kt` | 불 켜기/끄기 한 곳에 모은 진입점 (위젯과 앱 화면이 같은 길을 씀) |
+| `Torch.kt` | `CameraManager.setTorchMode` 로 실제 LED 제어. 현재 상태 읽기 포함 |
+| `AutoOff.kt` | 자동 꺼짐 알람 (`AlarmManager`) |
+| `MainActivity.kt` | 설치 후 한 번 쓰는 설정 화면 — 위젯 놓기, 자동 꺼짐 시간, 큰 버튼 |
+| `Prefs.kt` | 설정값 저장 |
+
+### 설계 메모
+
+- **서비스를 띄우지 않습니다.** `setTorchMode()` 는 시스템이 상태를 들고 있어서, 불이 켜져 있는 동안 앱은 완전히 종료되어 있어도 됩니다. 배터리와 알림줄이 깨끗합니다.
+- **상태를 직접 읽습니다.** 위젯을 누르면 먼저 `TorchCallback` 으로 시스템의 실제 불 상태를 확인한 뒤 반대로 바꿉니다. 그래서 상단바 빠른설정으로 불을 켰다 꺼도 위젯 표시가 어긋나지 않습니다.
+- **자동 꺼짐은 알람으로.** 안드로이드 12부터 정확한 알람은 사용자 권한이 필요해서, 권한이 없으면 부정확 알람으로 자동으로 낮춥니다 (몇 분 늦게 꺼져도 문제없는 기능이라 설정 화면으로 보내지 않습니다).
+
+### 요구 사항
+
+- 안드로이드 8.0 (API 26) 이상
+- 플래시(LED)가 있는 기기

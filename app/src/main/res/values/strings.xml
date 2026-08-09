@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">손전등</string>
+    <string name="widget_label">손전등</string>
+
+    <string name="state_on">켜짐</string>
+    <string name="state_off">꺼짐</string>
+
+    <string name="button_turn_on">켜기</string>
+    <string name="button_turn_off">끄기</string>
+
+    <string name="widget_cd_on">손전등 켜짐. 누르면 꺼집니다</string>
+    <string name="widget_cd_off">손전등 꺼짐. 누르면 켜집니다</string>
+
+    <string name="auto_off_title">자동으로 꺼지는 시간</string>
+    <string name="auto_off_minutes_fmt">%1$d분 뒤 자동으로 끄기</string>
+    <string name="auto_off_never">자동으로 끄지 않기</string>
+
+    <string name="add_widget">홈 화면에 위젯 추가하기</string>
+    <string name="pin_unsupported">이 휴대폰에서는 자동 추가가 안 됩니다. 홈 화면의 빈 곳을 길게 누른 뒤 위젯 목록에서 \'손전등\'을 찾아 주세요.</string>
+
+    <string name="no_flash">이 휴대폰에는 플래시가 없습니다</string>
+    <string name="help">홈 화면에 위젯을 놓으면 앱을 열지 않고 한 번만 눌러서 켜고 끌 수 있습니다.</string>
+</resources>
