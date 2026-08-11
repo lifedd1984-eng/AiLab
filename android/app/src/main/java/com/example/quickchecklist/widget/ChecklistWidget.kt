@@ -36,6 +36,7 @@ import androidx.glance.text.TextDecoration
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import com.example.quickchecklist.MainActivity
+import com.example.quickchecklist.R
 import com.example.quickchecklist.data.ChecklistStore
 
 class ChecklistWidgetReceiver : GlanceAppWidgetReceiver() {
@@ -61,23 +62,14 @@ class SelectCategoryAction : ActionCallback {
     }
 }
 
-// 고정 팔레트 — GlanceTheme의 동적(Material You) 색상은 매 렌더마다 시스템 팔레트를
-// 다시 계산해 One UI 등 일부 런처에서 위젯 갱신이 눈에 띄게 느려진다. 값을 고정해서 제거.
-private val Green = Color(0xFF1F9D5B)
-private val CardLight = Color(0xFFFFFFFF)
-private val CardDark = Color(0xFF1F2420)
-private val InkLight = Color(0xFF1A211C)
-private val InkDark = Color(0xFFE8ECE8)
-private val MutedLight = Color(0xFF6C766F)
-private val MutedDark = Color(0xFF98A19A)
-private val ChipLight = Color(0xFFE9ECE8)
-private val ChipDark = Color(0xFF262C27)
-
-private val bg = ColorProvider(day = CardLight, night = CardDark)
-private val ink = ColorProvider(day = InkLight, night = InkDark)
-private val muted = ColorProvider(day = MutedLight, night = MutedDark)
-private val chipBg = ColorProvider(day = ChipLight, night = ChipDark)
-private val greenProvider = ColorProvider(Green)
+// 고정 팔레트(day/night 리소스) — GlanceTheme의 동적(Material You) 색상은 매 렌더마다
+// 시스템 팔레트를 다시 계산해 One UI 등 일부 런처에서 위젯 갱신이 눈에 띄게 느려진다.
+// 리소스 기반 색상은 다크모드는 그대로 따라가면서도 매 렌더 계산이 없어 빠르다.
+private val bg = ColorProvider(R.color.widget_bg)
+private val ink = ColorProvider(R.color.widget_ink)
+private val muted = ColorProvider(R.color.widget_muted)
+private val chipBg = ColorProvider(R.color.widget_chip)
+private val greenProvider = ColorProvider(Color(0xFF1F9D5B))
 private val whiteProvider = ColorProvider(Color.White)
 
 class ChecklistGlanceWidget : GlanceAppWidget() {
