@@ -340,6 +340,7 @@ Checklist/
 데이터 모델 영향: `Category { id, name, icon, sortOrder }` 추가, `ChecklistItem`에 `categoryID` 추가, 완료 항목은 `archived` 플래그(정리 전 `isDone`, 정리 후 `archived`)로 구분. 일정 영향 약 +3~4일.
 
 4. **Android 지원 추가** (2026-08-09 확정) — §3의 "Android 제외"를 뒤집어 v1.0에 포함. 구현 방식은 **네이티브 2벌**: iOS(SwiftUI + WidgetKit, `ios/`) / Android(Jetpack Compose + Glance 위젯, `android/`). 크로스플랫폼 프레임워크는 배제 — 핵심인 홈 화면 위젯이 양쪽 모두 네이티브 필수라 공수 절감 효과가 없고 툴체인만 늘어난다. 두 구현은 동일한 데이터 스키마·기능 명세를 공유한다. Android는 위젯이 앱과 같은 프로세스라 App Group이 불필요하고, 위젯 자유 리사이즈 덕분에 **원 요청이었던 1행 "긴 막대" 형태도 가능**하다.
+5. **PWA(웹 앱) 추가** (2026-08-09) — iOS 설치 마찰(Apple 개발자 계정·서명·TestFlight 승인 대기)이 크다는 피드백으로, `pwa/`에 별도 웹 버전 추가. 회원가입·서명·심사 없이 브라우저에서 "홈 화면에 추가"만으로 설치되는 PWA. **단, 홈 화면 위젯은 iOS/Android 정책상 PWA로 구현 불가** — 위젯이 핵심 가치인 이 앱에서 PWA는 네이티브 앱의 대체재가 아니라 "지금 바로 체험" 용도의 보조 배포 경로. 데이터는 기기 로컬(localStorage) 전용, 기기 간 동기화 없음. GitHub Pages로 자동 배포.
 
 ## 16. 다음 단계
 

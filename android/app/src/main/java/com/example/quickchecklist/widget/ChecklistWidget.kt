@@ -3,12 +3,10 @@ package com.example.quickchecklist.widget
 import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
-import androidx.glance.GlanceTheme
 import androidx.glance.LocalSize
 import androidx.glance.action.ActionParameters
 import androidx.glance.action.actionParametersOf
@@ -63,21 +61,34 @@ class SelectCategoryAction : ActionCallback {
     }
 }
 
+// 고정 팔레트 — GlanceTheme의 동적(Material You) 색상은 매 렌더마다 시스템 팔레트를
+// 다시 계산해 One UI 등 일부 런처에서 위젯 갱신이 눈에 띄게 느려진다. 값을 고정해서 제거.
+private val Green = Color(0xFF1F9D5B)
+private val CardLight = Color(0xFFFFFFFF)
+private val CardDark = Color(0xFF1F2420)
+private val InkLight = Color(0xFF1A211C)
+private val InkDark = Color(0xFFE8ECE8)
+private val MutedLight = Color(0xFF6C766F)
+private val MutedDark = Color(0xFF98A19A)
+private val ChipLight = Color(0xFFE9ECE8)
+private val ChipDark = Color(0xFF262C27)
+
+private val bg = ColorProvider(day = CardLight, night = CardDark)
+private val ink = ColorProvider(day = InkLight, night = InkDark)
+private val muted = ColorProvider(day = MutedLight, night = MutedDark)
+private val chipBg = ColorProvider(day = ChipLight, night = ChipDark)
+private val greenProvider = ColorProvider(Green)
+private val whiteProvider = ColorProvider(Color.White)
+
 class ChecklistGlanceWidget : GlanceAppWidget() {
 
-    override val sizeMode = SizeMode.Responsive(
-        setOf(
-            DpSize(250.dp, 60.dp),   // 1행 "긴 막대" — Android에선 가능
-            DpSize(250.dp, 110.dp),  // 4x2
-            DpSize(250.dp, 250.dp),  // 4x4
-        )
-    )
+    // Responsive는 정의된 모든 브레이크포인트를 매 갱신마다 전부 그려서 체크 한 번에
+    // 위젯이 3중으로 렌더링됐다 — 실제 크기 하나만 그리는 Exact로 전환해 속도 개선.
+    override val sizeMode = SizeMode.Exact
 
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         provideContent {
-            GlanceTheme {
-                WidgetContent(context)
-            }
+            WidgetContent(context)
         }
     }
 
@@ -97,12 +108,10 @@ class ChecklistGlanceWidget : GlanceAppWidget() {
             else -> 1
         }
 
-        val green = Color(0xFF1F9D5B)
-
         Column(
             modifier = GlanceModifier
                 .fillMaxSize()
-                .background(GlanceTheme.colors.widgetBackground)
+                .background(bg)
                 .cornerRadius(20.dp)
                 .padding(12.dp)
                 .clickable(actionStartActivity<MainActivity>())
@@ -117,33 +126,30 @@ class ChecklistGlanceWidget : GlanceAppWidget() {
                     Text(
                         text = "${cat.icon} ${cat.name} $remaining",
                         style = TextStyle(
-                            fontSize = 11.sp,
+                            fontSize = 14.sp,
                             fontWeight = FontWeight.Bold,
-                            color = if (selected) ColorProvider(Color.White)
-                                    else GlanceTheme.colors.onSurfaceVariant,
+                            color = if (selected) whiteProvider else ink,
                         ),
+                        maxLines = 1,
                         modifier = GlanceModifier
-                            .background(
-                                if (selected) ColorProvider(green)
-                                else GlanceTheme.colors.surfaceVariant
-                            )
+                            .background(if (selected) greenProvider else chipBg)
                             .cornerRadius(20.dp)
-                            .padding(horizontal = 9.dp, vertical = 4.dp)
+                            .padding(horizontal = 11.dp, vertical = 6.dp)
                             .clickable(
                                 actionRunCallback<SelectCategoryAction>(
                                     actionParametersOf(CategoryIdKey to cat.id)
                                 )
                             )
                     )
-                    Spacer(GlanceModifier.width(5.dp))
+                    Spacer(GlanceModifier.width(6.dp))
                 }
             }
-            Spacer(GlanceModifier.height(6.dp))
+            Spacer(GlanceModifier.height(8.dp))
 
             if (items.isEmpty()) {
                 Text(
                     text = "목록이 비었어요 — 탭해서 추가",
-                    style = TextStyle(fontSize = 13.sp, color = GlanceTheme.colors.onSurfaceVariant),
+                    style = TextStyle(fontSize = 15.sp, color = muted),
                     modifier = GlanceModifier.padding(top = 6.dp)
                 )
             } else {
@@ -152,7 +158,7 @@ class ChecklistGlanceWidget : GlanceAppWidget() {
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = GlanceModifier
                             .fillMaxWidth()
-                            .padding(vertical = 3.dp)
+                            .padding(vertical = 5.dp)
                             .clickable(
                                 actionRunCallback<ToggleItemAction>(
                                     actionParametersOf(ItemIdKey to item.id)
@@ -162,20 +168,18 @@ class ChecklistGlanceWidget : GlanceAppWidget() {
                         Text(
                             text = if (item.isDone) "✓" else "○",
                             style = TextStyle(
-                                fontSize = 15.sp,
+                                fontSize = 19.sp,
                                 fontWeight = FontWeight.Bold,
-                                color = if (item.isDone) ColorProvider(green)
-                                        else GlanceTheme.colors.onSurfaceVariant,
+                                color = if (item.isDone) greenProvider else muted,
                             ),
                         )
-                        Spacer(GlanceModifier.width(8.dp))
+                        Spacer(GlanceModifier.width(10.dp))
                         Text(
                             text = item.title,
                             maxLines = 1,
                             style = TextStyle(
-                                fontSize = 14.sp,
-                                color = if (item.isDone) GlanceTheme.colors.onSurfaceVariant
-                                        else GlanceTheme.colors.onSurface,
+                                fontSize = 17.sp,
+                                color = if (item.isDone) muted else ink,
                                 textDecoration = if (item.isDone) TextDecoration.LineThrough
                                                  else TextDecoration.None,
                             ),
@@ -185,8 +189,8 @@ class ChecklistGlanceWidget : GlanceAppWidget() {
                 if (items.size > maxRows) {
                     Text(
                         text = "+${items.size - maxRows}개 더",
-                        style = TextStyle(fontSize = 11.sp, color = GlanceTheme.colors.onSurfaceVariant),
-                        modifier = GlanceModifier.fillMaxWidth().padding(top = 2.dp)
+                        style = TextStyle(fontSize = 13.sp, color = muted),
+                        modifier = GlanceModifier.fillMaxWidth().padding(top = 3.dp)
                     )
                 }
             }
