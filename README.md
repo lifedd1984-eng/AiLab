@@ -1,4 +1,4 @@
-# test1
+# ai_lab_1
 
 This repository was set up while testing a remote Claude Code session
 ("remote control") — running Claude Code from the web or mobile app against
